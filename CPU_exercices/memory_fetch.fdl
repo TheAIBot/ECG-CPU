@@ -11,21 +11,23 @@ ipblock instmem(in address : ns(5);
 dp PC(out pc_out : ns(5)){
 	reg b : ns(5);
 	always{
-		b = pc_out + 1;
-		pc_out = b;
+		b = pc_out;
+		pc_out = b + 1;
 	}
 }
 
 
-dp fetch(in address : ns(5))
+dp fetch(in address : ns(5); out odata : ns(32))
 {
 	reg wr : ns(1);
 	reg rd : ns(1);
 	reg idata : ns(32);
-	reg odata : ns(32);
 	
 	use instmem(address, 0, 1, idata, odata);
+}
 
+dp show(in odata : ns(32))
+{
 	always
 	{
 		$display($hex, "mem=", odata); 
@@ -33,8 +35,10 @@ dp fetch(in address : ns(5))
 }
 
 
+
 system myFirstSystem {
 	PC(pc_out);
-	memoryOP(pc_out);
+	fetch(pc_out, odata);
+	show(odata);
 }
 

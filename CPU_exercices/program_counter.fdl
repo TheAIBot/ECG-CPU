@@ -2,12 +2,9 @@ $option "vcd"
 
 dp PC(out pc_out : ns(5)){
 	reg b : ns(5);
-	$trace(pc_out, "pc.txt");
 	always{
-		$display($dec, "Cycle: ", $cycle);
-		$display($dec, "pc_out:",pc_out);
-		b = pc_out + 1;
-		pc_out = b;
+		b = pc_out;
+		pc_out = b + 1;
 	}
 }
 system PCsystem{
