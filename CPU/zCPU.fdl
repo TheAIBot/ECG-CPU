@@ -1,11 +1,11 @@
 system CPU
 {
-	PC(odata[6:31], pcJMP, pc_out);
+	PC(odata[0:25], pcJMP, pc_out);
 	fetch(pc_out, odata);
 
-	decoder(odata[0:2], pcJMP, ALUInstruction, useIntermediate, storeALU);
+	decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU);
 
-	register(odata[6:8], odata[9:11], storeALU, odata[3:5], ALUout, a, b);
-	mux_ALU_b(b, odata[9:31], useIntermediate, correctB);
-	alu(a, correctB, ALUInstruction, ALUout);
+	register(odata[23:25], odata[20:22], storeALU, odata[26:28], ALUout, a, b);
+	mux_ALU_b(b, odata[0:22], useIntermediate, correctB);
+	ALU(a, correctB, ALUInstruction, ALUout);
 }
