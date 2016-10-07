@@ -1,7 +1,7 @@
 dp decoder(in op : ns(3);
 		   out pcJMP : ns(1);
 		   out ALUInstruction  : ns(2);
-		   out intermediate : ns(1);
+		   out useIntermediate : ns(1);
 		   out storeALU : ns(1))
 {
 	sig x : ns(5);
@@ -17,7 +17,7 @@ dp decoder(in op : ns(3);
 							0b10000;
 		pcJMP = x[0];
 		ALUInstruction = x[1:2];
-		intermediate = x[3];
+		useIntermediate = x[3];
 		storeALU = x[4];
 	}
 }

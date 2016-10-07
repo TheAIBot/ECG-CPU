@@ -1,16 +1,18 @@
 ipblock instmem(in address : ns(5);
 	in wr,rd : ns(1);
 	in idata : ns(32);
-	out odata : ns(32)){
+	out odata : ns(32))
+{
 	iptype "ram";
 	ipparm "size=64";
 	ipparm "wl=32";
-	ipparm "file=memory_txt.txt";
+	ipparm "file=program.txt";
 }
 
 dp PC(in JMP : ns(26);
 	  in doJMP : ns(1);
-	  out pc_out : ns(32)){
+	  out pc_out : ns(32))
+{
 	reg b : ns(32);
 	always{
 		b = pc_out;
@@ -21,8 +23,6 @@ dp PC(in JMP : ns(26);
 
 dp fetch(in address : ns(5); out odata : ns(32))
 {
-	reg wr : ns(1);
-	reg rd : ns(1);
 	reg idata : ns(32);
 	
 	use instmem(address, 0, 1, idata, odata);

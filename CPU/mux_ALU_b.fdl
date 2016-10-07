@@ -1,4 +1,4 @@
-dp muc_ALU_b(in b : ns(32);
+dp mux_ALU_b(in b : ns(32);
 			 in intermediate : ns(23);
 			 in useIntermediate : ns(1);
 			 out correctB : ns(32))
