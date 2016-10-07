@@ -72,20 +72,37 @@ Store totalValue r0
 #return totalValue / N;
 shiftRight r0 r0 5
 Store @return r0
+JMP 0
+
+
+-----------------------------------------------------
+
+ALU
+ADD 00
+SUB 01
+SHIFTRIGHT 10
+
 
 
 
 -----------------------------------------------------
 
-Load
-Add
-AddI
-And
-Store
-Sub
-ShiftRightI
-JMP
 
+
+                012 345 678 9
+Add             000 000 000 000 - 00000000000000000000
+And				001 000 000 000 - 00000000000000000000
+Sub				010 000 000 000 - 00000000000000000000
+AddI            011 000 000     - 00000000000000000000 000
+ShiftRightI		100 000 000     - 00000000000000000000 000
+Store			101 000   		- 00000000000000000000 000 000
+Load 			110 000   		- 00000000000000000000 000 000
+JMP				111 000   		- 00000000000000000000 000 000
+
+R = 3bit
+op = 3bit
+Addr = 26
+I = 23
 
 R-instruction op R R R
 I-instruction op R R I
