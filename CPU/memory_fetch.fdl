@@ -6,7 +6,7 @@ ipblock instmem(in address : ns(5);
 	iptype "ram";
 	ipparm "size=64";
 	ipparm "wl=32";
-	ipparm "file=program.UCI";
+	ipparm "file=UCI_programs/program.UCI";
 }
 
 dp PC(in JMP : ns(26);
