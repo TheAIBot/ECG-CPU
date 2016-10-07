@@ -1,0 +1,2 @@
+bash run-CPU.sh <number of cycles>
+java -jar UCIC.jar <program file name>
