@@ -36,6 +36,11 @@ public class UCIC {
 			
 			int index = 0;
 			for (String line : allLines) {
+				//ignore empty lines
+				if (line.trim().isEmpty()) {
+					continue;
+				}
+				
 				String[] commands = line.split(" ");
 				int cmdLength = 32;
 				String correctCommand = "";
