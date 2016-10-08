@@ -1,3 +1,2 @@
 #!/bin/bash
-cat CPU/*.fdl > whole-CPU.fdl
-fdlsim whole-CPU.fdl $1
+cpp -P CPU/CPU.fdl | fdlsim $1

@@ -1,3 +1,9 @@
+#include "advanced_alu.fdl"
+#include "decoder.fdl"
+#include "memory_fetch.fdl"
+#include "mux_ALU_b.fdl"
+#include "register.fdl"
+
 system CPU
 {
 	PC(odata[0:25], pcJMP, pc_out);
