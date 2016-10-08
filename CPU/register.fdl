@@ -38,8 +38,5 @@ dp register(in asel, bsel : ns(3);
 		r5 = storeenable == 0 ?  r5 : storesel == 0b101 ?  storedata : r5;
 		r6 = storeenable == 0 ?  r6 : storesel == 0b110 ?  storedata : r6;
 		r7 = storeenable == 0 ?  r7 : storesel == 0b111 ?  storedata : r7;
-
-		$display($dec, " Fib = ", r1, " ", r2); 
-
 	}
 }

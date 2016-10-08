@@ -6,6 +6,7 @@ dp ALU(in a, b : ns(32);
 			 select == 0b01 ? a -  b :
 			 select == 0b10 ? a >> b :
 				 	  a &  b;
+		$display($dec, "alu = ", ALUout);
 	}
 }
 
@@ -96,7 +97,7 @@ ipblock instmem(in address : ns(5);
 	iptype "ram";
 	ipparm "size=64";
 	ipparm "wl=32";
-	ipparm "file=UCI_programs/program.UCI";
+	ipparm "file=UCI_programs/program.asm";
 }
 
 dp PC(in JMP : ns(26);
@@ -189,9 +190,6 @@ dp register(in asel, bsel : ns(3);
 		r5 = storeenable == 0 ?  r5 : storesel == 0b101 ?  storedata : r5;
 		r6 = storeenable == 0 ?  r6 : storesel == 0b110 ?  storedata : r6;
 		r7 = storeenable == 0 ?  r7 : storesel == 0b111 ?  storedata : r7;
-
-		$display($dec, " Fib = ", r1, " ", r2); 
-
 	}
 }
 system CPU

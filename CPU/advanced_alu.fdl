@@ -6,6 +6,7 @@ dp ALU(in a, b : ns(32);
 			 select == 0b01 ? a -  b :
 			 select == 0b10 ? a >> b :
 				 	  a &  b;
+		$display($dec, "alu = ", ALUout);
 	}
 }
 
