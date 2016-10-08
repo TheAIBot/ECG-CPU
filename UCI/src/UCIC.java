@@ -22,10 +22,22 @@ public class UCIC {
 		
 		try {
 			List<String> assembly = compiler.compileFile(args[0]);
-			compiler.saveProgram(assembly, args[0].split("\\.")[0] + ".asm");
+			
+			String savePath;
+			if (args.length == 2) {
+				savePath = args[1];
+			}
+			else {
+				savePath = args[0].split("\\.")[0] + ".asm";
+			}
+			
+			
+			
+			
+			compiler.saveProgram(assembly, savePath);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			e.printStackTrace(System.out);
+			//e.printStackTrace(System.out);
 		}
 	}
 }
