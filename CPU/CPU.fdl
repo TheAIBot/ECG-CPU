@@ -4,6 +4,11 @@
 #include "mux_ALU_b.fdl"
 #include "register.fdl"
 
+$option "profile_toggle_alledge"
+//$option "profile_toggle_upedge"
+$option "profile_display_operations"
+//$option "profile_display_cycles"
+
 system CPU
 {
 	PC(odata[0:25], pcJMP, pc_out);

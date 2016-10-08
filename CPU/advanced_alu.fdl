@@ -3,10 +3,10 @@ dp ALU(in a, b : ns(32);
 	   out ALUout : ns(32)) {
 	always {
 		ALUout = select == 0b00 ? a +  b :
-			 select == 0b01 ? a -  b :
-			 select == 0b10 ? a >> b :
-				 	  a &  b;
-		$display($dec, "alu = ", ALUout);
+			     select == 0b01 ? a -  b :
+			     select == 0b10 ? a >> b :
+				 	              a &  b;
+		//$display($dec, "alu = ", ALUout);
 	}
 }
 

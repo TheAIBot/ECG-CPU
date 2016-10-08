@@ -1,3 +1,18 @@
+dp mux8a(in r0, r1, r2, r3,r4, r5, r6, r7 : ns(32); 
+        in sel : ns(3); 
+        out res : ns(32))
+{
+    always
+    {
+        res  = sel[2] ? sel[1] ? sel[0] ? r7 : r6 : 
+                                 sel[0] ? r5 : r4 : 
+                        sel[1] ? sel[0] ? r3 : r2 : 
+                                 sel[0] ? r1 : r0;
+    }
+}
+
+dp mux8b : mux8a
+
 dp register(in asel, bsel : ns(3); 
 			in storeenable : ns(1);
 			in storesel : ns(3);
@@ -12,8 +27,11 @@ dp register(in asel, bsel : ns(3);
 	reg r6 : ns(32);
 	reg r7 : ns(32);
 
+    //use mux8a(r0, r1, r2, r3, r4, r5, r6, r7, asel, a);
+    //use mux8b(r0, r1, r2, r3, r4, r5, r6, r7, bsel, b);
+
 	always {
-		a = asel == 0b000 ? r0 : 
+	  a = asel == 0b000 ? r0 : 
 			asel == 0b001 ? r1 : 
 			asel == 0b010 ? r2 : 
 			asel == 0b011 ? r3 : 
