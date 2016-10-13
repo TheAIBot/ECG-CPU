@@ -1,0 +1,27 @@
+dp shouldStall(in doBus : ns(1);
+			   in busDone : ns(1);
+			   out stall : ns(1))
+{
+	always
+	{
+		stall = doBus & (~busDone);
+	}
+}
+
+dp teststall(out doBus : ns(1);
+		out busDone : ns(1);
+		in stall : ns(1))
+{
+	always
+	{
+		doBus = 1;
+		busDone = 0;
+		$display($dec, stall);
+	}
+}
+
+//system sda
+//{
+//	shouldStall(doBus, busDone, stall);
+//	teststall(doBus, busDone, stall);
+//}

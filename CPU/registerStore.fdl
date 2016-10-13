@@ -1,0 +1,10 @@
+dp registerStore(in selFromBus : ns(1);
+				 in fromALU : ns(32);
+				 in fromBus : ns(32);
+				 out toRegister : ns(32))
+{
+	always
+	{
+		toRegister = selFromBus ? fromBus : fromALU;
+	}
+}

@@ -11,12 +11,15 @@ ipblock instmem(in address : ns(5);
 
 dp PC(in JMP : ns(26);
 	  in doJMP : ns(1);
+	  in stall : ns(1);
 	  out pc_out : ns(32))
 {
 	reg b : ns(32);
 	always{
 		b = pc_out;
-		pc_out = doJMP ? (ns(32))JMP : b + 1;
+		pc_out = stall ? b :
+				 doJMP ? (ns(32))JMP : b + 1;
+		$display($dec, "pc= ", pc_out);
 	}
 }
 
