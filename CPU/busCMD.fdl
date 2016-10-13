@@ -9,7 +9,7 @@ dp busCMD(in target : ns(4);
 	}
 }
 
-dp test(out target : ns(4);
+dp testbus(out target : ns(4);
 		  out RW : ns(1);
 		  out address : ns(32);
 		  in M_CMD : ns(32))
@@ -25,5 +25,5 @@ dp test(out target : ns(4);
 //system fisk
 //{
 //	busCMD(target, RW, address, M_CMD);
-//	test(target, RW, address, M_CMD);
+//	testbus(target, RW, address, M_CMD);
 //}
