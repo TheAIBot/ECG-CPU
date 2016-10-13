@@ -49,18 +49,18 @@ dp CPU(
 
 	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, doBus, RW);
 
-	use registerStore(M_dataoutrdy, ALUout, M_dataout, toRegister);
+	use registerStore(M_dataoutrdy, doBus, ALUout, M_dataout, toRegister);
 	use register(odata[23:25], odata[20:22], storeALU, odata[26:28], toRegister, a, b);
 	use mux_ALU_b(b, odata[0:22], useIntermediate, correctB);
 	use ALU(a, correctB, ALUInstruction, ALUout);
 
-	use busCMD(odata[0:3], RW, a, M_cmd);
+	use busCMD(odata[0:3], RW, b, M_cmd);
 
    	always
 	{
    		M_datain = b;
    		M_datainrdy = doBus;
-		$display($dec, "m_data= ", M_dataout, " m_datardy= ", M_dataoutrdy, $bin, " cmd= ", M_cmd);
+		$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, $bin, " cmd= ", M_cmd);
 	}       
 }
 

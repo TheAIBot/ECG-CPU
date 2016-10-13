@@ -1,10 +1,17 @@
-dp registerStore(in selFromBus : ns(1);
+dp registerStore(in busDone : ns(1);
+                 in doBus : ns(1);
 				 in fromALU : ns(32);
 				 in fromBus : ns(32);
 				 out toRegister : ns(32))
 {
+    sig sel : ns(2);
 	always
 	{
-		toRegister = selFromBus ? fromBus : fromALU;
+        sel = doBus # busDone;
+		toRegister = sel == 00 ? fromALU : 
+                     sel == 01 ? 0 :
+                     sel == 10 ? 0 :
+                                 fromBus;
+        //toRegister = busDone ? fromBus : fromALU;
 	}
 }
