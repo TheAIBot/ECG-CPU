@@ -58,9 +58,11 @@ dp CPU(
 
    	always
 	{
-   		M_datain = b;
+   		M_datain = a;
    		M_datainrdy = doBus;
-		$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, $bin, " cmd= ", M_cmd);
+		$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
+		$display($dec, "a: ", a, ", b: ", b);
+		$display($dec, " ");
 	}       
 }
 
@@ -530,7 +532,7 @@ dp DataMem(
        address = (cmdr[27] == 0) ? datainr : 0b00000 # cmdr[0:26]; // if Store Word instruction, use cmd[0:26] as address. If Load Word instruction use datain as address
        idata = (cmdr[27] == 0) ? 0 : datainr; // if store word use datain as data to be stored, if load word, just set idata to 0
        //$display($dec, "Cycle: ", $cycle);
-   	   //$display($dec, "   address: ", address);
+   	   $display($dec, "   address: ", address, " r: ", rd, " w: ", wr, " idata: ", idata);
    }
    
    sfg captureData{
