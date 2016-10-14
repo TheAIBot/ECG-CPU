@@ -1,17 +1,11 @@
 dp registerStore(in busDone : ns(1);
-                 in doBus : ns(1);
 				 in fromALU : tc(32);
 				 in fromBus : tc(32);
 				 out toRegister : tc(32))
 {
-    sig sel : ns(2);
 	always
 	{
-        sel = doBus # busDone;
-		//toRegister = sel == 00 ? fromALU : 
-        //             sel == 01 ? 0 :
-        //             sel == 10 ? 0 :
-         //                        fromBus;
         toRegister = busDone ? fromBus : fromALU;
+		$display($dec, "toStore: ", toRegister);
 	}
 }

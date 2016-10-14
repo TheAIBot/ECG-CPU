@@ -1,10 +1,12 @@
 dp shouldStall(in doBus : ns(1);
 			   in busDone : ns(1);
+			   in M_datainrdy : ns(1);
+			   in memoryStall : ns(1);
 			   out stall : ns(1))
 {
 	always
 	{
-		stall = doBus & (~busDone);
+		stall = (doBus & (~busDone) & M_datainrdy) | memoryStall;
 	}
 }
 
