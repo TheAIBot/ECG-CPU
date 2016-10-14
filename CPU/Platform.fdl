@@ -6,6 +6,8 @@
 #include "busCMD.fdl"
 #include "registerStore.fdl"
 #include "stall.fdl"
+#include "cache.fdl"
+#include "memory_controller.fdl"
 
 $option "vcd"
 
@@ -42,24 +44,32 @@ dp CPU(
 	sig a : tc(32);
 	sig b : tc(32);
 	sig correctB : tc(32);
-	
+	sig useBus : ns(1);
+	sig cacheR : ns(1);
+	sig cacheW : ns(1);
+	sig cacheAddress : ns(32);	
+	sig cacheOut : tc(32);
+	sig memoryOut : tc(32);
+
 	use shouldStall(doBus, M_dataoutrdy, stall);
 	use PC(odata[0:25], pcJMP, stall, pc_out);
 	use fetch(pc_out, odata);
 
 	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, doBus, RW);
 
-	use registerStore(M_dataoutrdy, doBus, ALUout, M_dataout, toRegister);
+	use registerStore(M_dataoutrdy, doBus, ALUout, memoryOut, toRegister);
 	use register(odata[23:25], odata[20:22], storeALU, odata[26:28], toRegister, a, b);
 	use mux_ALU_b(b, odata[0:22], useIntermediate, correctB);
 	use ALU(a, correctB, ALUInstruction, ALUout);
 
+	use memoryController(odata[0:3], a, b, doBus, RW, M_dataout, cacheOut, useBus, cacheR, cacheW, cacheAddress, memoryOut);
+	use cache(cacheAddress, cacheW, cacheR, a, cacheOut);
 	use busCMD(odata[0:3], RW, b, M_cmd);
 
    	always
 	{
    		M_datain = a;
-   		M_datainrdy = doBus;
+   		M_datainrdy = useBus;
 		$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
 		$display($dec, "a: ", a, ", b: ", b);
 		$display($dec, " ");
