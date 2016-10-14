@@ -16,16 +16,16 @@ dp mux8b : mux8a
 dp register(in asel, bsel : ns(3); 
 			in storeenable : ns(1);
 			in storesel : ns(3);
-			in storedata : ns(32);
-			out a, b : ns(32)) {
-	reg r0 : ns(32);
-	reg r1 : ns(32);
-	reg r2 : ns(32);
-	reg r3 : ns(32);
-	reg r4 : ns(32);
-	reg r5 : ns(32);
-	reg r6 : ns(32);
-	reg r7 : ns(32);
+			in storedata : tc(32);
+			out a, b : tc(32)) {
+	reg r0 : tc(32);
+	reg r1 : tc(32);
+	reg r2 : tc(32);
+	reg r3 : tc(32);
+	reg r4 : tc(32);
+	reg r5 : tc(32);
+	reg r6 : tc(32);
+	reg r7 : tc(32);
 
     //use mux8a(r0, r1, r2, r3, r4, r5, r6, r7, asel, a);
     //use mux8b(r0, r1, r2, r3, r4, r5, r6, r7, bsel, b);

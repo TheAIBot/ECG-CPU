@@ -31,17 +31,17 @@ dp CPU(
 	sig doBus : ns(1);
 	sig stall : ns(1);
 	sig pcJMP : ns(1);
-	sig pc_out : ns(32);
-	sig odata : ns(32);
+	sig pc_out : tc(32);
+	sig odata : tc(32);
 	sig ALUInstruction : ns(2);
 	sig useIntermediate : ns(1);
 	sig storeALU : ns(1);
 	sig RW : ns(1);
-	sig ALUout : ns(32);
-	sig toRegister : ns(32);
-	sig a : ns(32);
-	sig b : ns(32);
-	sig correctB : ns(32);
+	sig ALUout : tc(32);
+	sig toRegister : tc(32);
+	sig a : tc(32);
+	sig b : tc(32);
+	sig correctB : tc(32);
 	
 	use shouldStall(doBus, M_dataoutrdy, stall);
 	use PC(odata[0:25], pcJMP, stall, pc_out);

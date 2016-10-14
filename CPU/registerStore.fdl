@@ -1,8 +1,8 @@
 dp registerStore(in busDone : ns(1);
                  in doBus : ns(1);
-				 in fromALU : ns(32);
-				 in fromBus : ns(32);
-				 out toRegister : ns(32))
+				 in fromALU : tc(32);
+				 in fromBus : tc(32);
+				 out toRegister : tc(32))
 {
     sig sel : ns(2);
 	always

@@ -1,7 +1,7 @@
 ipblock instmem(in address : ns(5);
 	in wr,rd : ns(1);
-	in idata : ns(32);
-	out odata : ns(32))
+	in idata : tc(32);
+	out odata : tc(32))
 {
 	iptype "ram";
 	ipparm "size=64";

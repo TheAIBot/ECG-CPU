@@ -1,7 +1,7 @@
-dp mux_ALU_b(in b : ns(32);
-	     in intermediate : ns(23);
+dp mux_ALU_b(in b : tc(32);
+	     in intermediate : tc(23);
 	     in useIntermediate : ns(1);
-	     out correctB : ns(32)){
+	     out correctB : tc(32)){
 	always	{
 		correctB = useIntermediate ? (ns(32))intermediate : b;
 	}
