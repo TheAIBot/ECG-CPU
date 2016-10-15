@@ -23,7 +23,7 @@ dp memoryController(in target : ns(4);
 		cacheAddress = RW ? b : a;
 		memoryOut = useBus ? M_dataOut : cacheOut;
 		hasDataFromMemory = cacheR | M_dataoutrdy;
-		stallOnce = (stallOnce == 0 & cacheR) ? 1 : 0;
-		memoryStall = stallOnce;
+		memoryStall = stallOnce ? 0 : cacheR;
+		stallOnce = memoryStall;
 	}
 }

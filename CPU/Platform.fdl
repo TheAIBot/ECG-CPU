@@ -73,8 +73,10 @@ dp CPU(
    		M_datain = a;
    		M_datainrdy = useBus;
 		$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
-		$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
-		$display($dec, "a: ", a, ", b: ", b);
+		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
+		//$display($dec, "a: ", a, ", b: ", b);
+        $display($bin, "instruction: ", odata);
+        $display($bin, "stall: ", stall);
 		$display($dec, " ");
 	}       
 }
