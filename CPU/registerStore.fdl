@@ -6,6 +6,6 @@ dp registerStore(in busDone : ns(1);
 	always
 	{
         toRegister = busDone ? fromBus : fromALU;
-		$display($dec, "toStore: ", toRegister);
+		//$display($dec, "toStore: ", toRegister);
 	}
 }
