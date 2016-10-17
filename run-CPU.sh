@@ -1,2 +1,2 @@
 #!/bin/bash
-cpp -P CPU/Platform.fdl | fdlsim $1
+cpp -P CPU/src/Platform.fdl | fdlsim $1

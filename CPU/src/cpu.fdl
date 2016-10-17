@@ -1,0 +1,59 @@
+dp CPU(
+           out M_datain : ns(32);
+           out M_cmd : ns(32);
+           out M_datainrdy : ns(1);
+           in M_dataout : ns(32);
+           in M_dataoutrdy : ns(1)
+           //in stall_cpu : ns(1)
+       )
+{
+	sig doBus : ns(1);
+	sig stall : ns(1);
+	sig pcJMP : ns(1);
+	sig pc_out : tc(32);
+	sig odata : tc(32);
+	sig ALUInstruction : ns(2);
+	sig useIntermediate : ns(1);
+	sig storeALU : ns(1);
+	sig RW : ns(1);
+	sig ALUout : tc(32);
+	sig toRegister : tc(32);
+	sig a : tc(32);
+	sig b : tc(32);
+	sig correctB : tc(32);
+	sig useBus : ns(1);
+	sig cacheR : ns(1);
+	sig cacheW : ns(1);
+	sig cacheAddress : ns(32);	
+	sig cacheOut : tc(32);
+	sig memoryOut : tc(32);
+	sig hasDataFromMemory : ns(1);
+	sig memoryStall : ns(1);
+
+	use shouldStall(doBus, M_dataoutrdy, useBus, memoryStall, stall);
+	use PC(odata[0:25], pcJMP, stall, pc_out);
+	use cache(cacheAddress, cacheW, cacheR, a, cacheOut);
+	use fetch(pc_out, odata);
+
+	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, doBus, RW);
+
+	use registerStore(hasDataFromMemory, ALUout, memoryOut, toRegister);
+	use registers(odata[23:25], odata[20:22], storeALU, odata[26:28], toRegister, a, b);
+	use mux_ALU_b(b, odata[0:22], useIntermediate, correctB);
+	use ALU(a, correctB, ALUInstruction, ALUout);
+
+	use memoryController(odata[0:3], a, b, doBus, RW, M_dataout, cacheOut, M_dataoutrdy, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
+	use busCMD(odata[0:3], RW, b, M_cmd);
+
+   	always
+	{
+   		M_datain = a;
+   		M_datainrdy = useBus;
+		//$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
+		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
+		//$display($dec, "a: ", a, ", b: ", b);
+        //$display($bin, "instruction: ", odata);
+        //$display($bin, "stall: ", stall);
+		//$display($dec, " ");
+	}       
+}

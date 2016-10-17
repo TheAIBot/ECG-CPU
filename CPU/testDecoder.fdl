@@ -1,0 +1,36 @@
+#include "src/decoder.fdl"
+
+dp testDecoder(out op : ns(3);
+   	       in pcJMP : ns(1);
+	       in ALUInstruction  : ns(2);
+	       in useIntermediate : ns(1);
+	       in storeALU : ns(1)) {
+	always{$display($bin, "Cycle:", $cycle, ". Testing decoder for the CPU. op = ", op , ", pcJMP = ", pcJMP , " ALUInstruction = ", ALUInstruction, ", useIntermediate = ", useIntermediate, ", storeALU = ", storeALU);}
+	sfg test_ADD	      		{ op = 0b000;}
+	sfg test_AND 			{ op = 0b001;}
+	sfg test_SUB 			{ op = 0b010;}
+	sfg test_ADDI			{ op = 0b011;}
+	sfg test_SHIFT_RIGHT_I 		{ op = 0b100;}
+	sfg test_LOAD			{ op = 0b101;}
+	sfg test_STORE			{ op = 0b110;}
+	sfg test_JMP			{ op = 0b111;}
+}
+
+// state machine to control testbench
+fsm f_testbench(testDecoder){
+	initial sADD;
+	state sAND, sSUB, sADDI, sSHIFT_RIGHT_I, sLOAD, sSTORE, sJMP;
+	@sADD 	    	 (test_ADD)		 -> sAND;
+	@sAND 		 (test_AND) 		 -> sSUB;
+	@sSUB 		 (test_SUB) 		 -> sADDI;
+	@sADDI 		 (test_ADDI) 		 -> sSHIFT_RIGHT_I;
+	@sSHIFT_RIGHT_I	 (test_SHIFT_RIGHT_I) 	 -> sLOAD;
+	@sLOAD 		 (test_LOAD) 		 -> sSTORE;
+	@sSTORE	 	 (test_STORE) 		 -> sJMP;
+	@sJMP 		 (test_JMP) 		 -> sADD;
+}
+
+system myFirstSystem {
+	decoder(op, pcJMP, ALUInstruction, useIntermediate, storeALU);
+	testDecoder(op, pcJMP, ALUInstruction, useIntermediate, storeALU);
+}

@@ -1,0 +1,24 @@
+#include "src/alu.fdl"
+
+dp testALUsd(out a, b:tc(32); out select : ns(2); in ALUout:tc(32)) {
+	always{$display($dec, "Cycle:", $cycle, "Testing advanced ALU for the CPU. a = ", a , ", b = ", b , " select = ", select, ", ALUout = ", ALUout);}
+	sfg test_ADD { a=535; b=35; select = 0b00;}
+	sfg test_SUB { a=535; b=35; select = 0b01;}
+	sfg test_SHIFT_RIGHT { a=535; b=3; select = 0b10;}
+	sfg test_AND { a=0b1101011; b=0b1111; select = 0b11;}
+}
+
+// state machine to control testbench
+fsm f_testbench(testALUsd){
+	initial sADD;
+	state sSUB, sSHIFT_RIGHT, sAND;
+	@sADD (test_ADD) -> sSUB; 
+	@sSUB (test_SUB) -> sSHIFT_RIGHT;
+	@sSHIFT_RIGHT (test_SHIFT_RIGHT) -> sAND;
+	@sAND (test_AND) -> sADD;
+}
+
+system myFirstSystem {
+	ALU(a,b,select,ALUout);
+	testALUsd(a,b,select, ALUout);
+}

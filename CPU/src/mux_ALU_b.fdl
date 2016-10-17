@@ -1,0 +1,8 @@
+dp mux_ALU_b(in b : tc(32);
+	     in intermediate : tc(23);
+	     in useIntermediate : ns(1);
+	     out correctB : tc(32)){
+	always	{
+		correctB = useIntermediate ? (tc(32))intermediate : b;
+	}
+}

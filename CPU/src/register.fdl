@@ -1,0 +1,44 @@
+dp registers(in asel, bsel : ns(3); 
+			 in storeenable : ns(1);
+			 in storesel : ns(3);
+			 in storedata : tc(32);
+			 out a, b : tc(32)) {
+	reg r0 : tc(32);
+	reg r1 : tc(32);
+	reg r2 : tc(32);
+	reg r3 : tc(32);
+	reg r4 : tc(32);
+	reg r5 : tc(32);
+	reg r6 : tc(32);
+	reg r7 : tc(32);
+
+	always {
+        a = asel == 0b000 ? r0 : 
+			asel == 0b001 ? r1 : 
+			asel == 0b010 ? r2 : 
+			asel == 0b011 ? r3 : 
+			asel == 0b100 ? r4 : 
+			asel == 0b101 ? r5 : 
+			asel == 0b110 ? r6 : 
+						  r7;
+
+		b = bsel == 0b000 ? r0 : 
+			bsel == 0b001 ? r1 : 
+			bsel == 0b010 ? r2 : 
+			bsel == 0b011 ? r3 : 
+			bsel == 0b100 ? r4 : 
+			bsel == 0b101 ? r5 : 
+			bsel == 0b110 ? r6 : 
+						  r7;
+
+		r1 = storeenable & storesel == 0b001 ? storedata : r1;
+		r2 = storeenable & storesel == 0b010 ? storedata : r2;
+		r3 = storeenable & storesel == 0b011 ? storedata : r3;
+		r4 = storeenable & storesel == 0b100 ? storedata : r4;
+		r5 = storeenable & storesel == 0b101 ? storedata : r5;
+		r6 = storeenable & storesel == 0b110 ? storedata : r6;
+		r7 = storeenable & storesel == 0b111 ? storedata : r7;
+
+		//$display($dec, " r1= ", r1," r2= ", r2," r3= ", r3," r4= ", r4," r5= ", r5," r6= ", r6," r7= ", r7);
+	}
+}
