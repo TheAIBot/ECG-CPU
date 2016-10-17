@@ -1,0 +1,14 @@
+dp ALU(in a, b : tc(32); 
+	   in sel : ns(2); 
+	   out ALUout : tc(32)) {
+	always {
+		ALUout = sel == 0b00 ? a +  b :
+			     sel == 0b01 ? a -  b :
+			     sel == 0b10 ? a >> b :
+				 	              a & b;
+		//$display($dec, "alu = ", ALUout, ", a=", a, ", b=", b,", select=" , sel);
+	}
+}
+
+
+

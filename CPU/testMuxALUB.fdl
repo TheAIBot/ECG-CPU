@@ -1,0 +1,25 @@
+#include "src/mux_ALU_b.fdl"
+
+dp testMux(out b : ns(32);
+   	   out intermediate : ns(23);
+	   out useIntermediate : ns(1);
+	   in correctB : ns(32)){
+
+	
+	always{$display($dec, "Cycle:", $cycle, ". Testing advanced ALU mux for the CPU. b = ", b , ", intermediate = ", intermediate , " useIntermediate = ", useIntermediate, ", correctB = ", correctB);}
+	sfg test_UseIntermediate {b = 55; intermediate = 35; useIntermediate = 1;}
+	sfg test_UseBGiven {b = 55; intermediate = 35; useIntermediate = 0;}
+}
+
+
+fsm mux_testbench(testMux){
+    initial sUseIntermediate;
+    state sUseBGiven;
+    @sUseIntermediate (test_UseIntermediate) -> sUseBGiven;
+    @sUseBGiven (test_UseBGiven) -> sUseIntermediate;
+}
+
+//system myFirstSystem {
+//	mux_ALU_b(b, intermediate, useIntermediate, correctB);
+//	testMux(b, intermediate, useIntermediate, correctB);
+//}

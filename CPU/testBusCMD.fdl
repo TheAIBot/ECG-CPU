@@ -1,0 +1,20 @@
+#include "src/busCMD.fdl"
+
+dp testbus(out target : ns(4);
+		  out RW : ns(1);
+		  out address : ns(32);
+		  in M_CMD : ns(32))
+{
+	always
+	{
+		target = 0b0100;
+		RW = 1;
+		address = 0b0101000010000001;
+	}
+}
+
+system fisk
+{
+	busCMD(target, RW, address, M_CMD);
+	testbus(target, RW, address, M_CMD);
+}
