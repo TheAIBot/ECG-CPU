@@ -3,7 +3,7 @@ dp decoder(in op : ns(3);
 	   out ALUInstruction  : ns(2);
 	   out useIntermediate : ns(1);
 	   out storeALU : ns(1);
-	   out doBus : ns(1);
+	   out useMem : ns(1);
 	   out RW : ns(1))
 {
 	sig x : ns(7);
@@ -22,12 +22,12 @@ dp decoder(in op : ns(3);
 	always{
         x = q(op);
 
-		doBus = x[6];
+		useMem = x[6];
 		RW = x[5]; //Read = 0, Write = 1
 		pcJMP = x[4];
 		ALUInstruction = x[2:3];
 		useIntermediate = x[1];
 		storeALU = x[0];
-		//$display($dec, doBus, RW);
+		//$display($dec, useMem, RW);
 	}
 }

@@ -7,7 +7,7 @@ dp CPU(
            //in stall_cpu : ns(1)
        )
 {
-	sig doBus : ns(1);
+	sig useMem : ns(1);
 	sig stall : ns(1);
 	sig pcJMP : ns(1);
 	sig pc_out : tc(32);
@@ -30,19 +30,19 @@ dp CPU(
 	sig hasDataFromMemory : ns(1);
 	sig memoryStall : ns(1);
 
-	use shouldStall(doBus, M_dataoutrdy, useBus, memoryStall, stall);
+	use shouldStall(useMem, M_dataoutrdy, useBus, memoryStall, stall);
 	use PC(odata[0:25], pcJMP, stall, pc_out);
 	use cache(cacheAddress, cacheW, cacheR, a, cacheOut);
 	use fetch(pc_out, odata);
 
-	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, doBus, RW);
+	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, useMem, RW);
 
 	use registerStore(hasDataFromMemory, ALUout, memoryOut, toRegister);
 	use registers(odata[23:25], odata[20:22], storeALU, odata[26:28], toRegister, a, b);
 	use mux_ALU_b(b, odata[0:22], useIntermediate, correctB);
 	use ALU(a, correctB, ALUInstruction, ALUout);
 
-	use memoryController(odata[0:3], a, b, doBus, RW, M_dataout, cacheOut, M_dataoutrdy, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
+	use memoryController(odata[0:3], a, b, useMem, RW, M_dataout, cacheOut, M_dataoutrdy, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
 	use busCMD(odata[0:3], RW, b, M_cmd);
 
    	always
