@@ -1,4 +1,4 @@
-dp shouldStall(in doBus : ns(1);
+dp shouldStall(in useMem : ns(1);
 			   in busDone : ns(1);
 			   in useBus : ns(1);
 			   in memoryStall : ns(1);
@@ -6,6 +6,6 @@ dp shouldStall(in doBus : ns(1);
 {
 	always
 	{
-		stall = (doBus & (~busDone) & useBus) | memoryStall;
+		stall = (useMem & (~busDone) & useBus) | memoryStall;
 	}
 }
