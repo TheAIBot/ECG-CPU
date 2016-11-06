@@ -449,7 +449,7 @@ ipblock datamem(in address : ns(12);
           out odata : ns(32)){
 
   iptype "ram";
-  ipparm "size=4096";
+  ipparm "size=10001";
   ipparm "wl=32";
   ipparm "file=datamemory.txt"; // initializes content. File syntax needs to be "addr data "* (the last space can also be a linebreak. NB! Should the students do a manual loading of the RAM to simulate a "real" system or is it ok if they just use this parameter?
   //ipparm "file=sddb48hex2.ecg"; 

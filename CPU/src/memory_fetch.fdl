@@ -9,7 +9,7 @@ ipblock instmem(in address : ns(5);
 	ipparm "file=UCI_programs/program.asm";
 }
 
-dp PC(in JMP : ns(26);
+dp PC(in JMP : ns(20);
 	  in doJMP : ns(1);
 	  in stall : ns(1);
 	  out pc_out : ns(32))

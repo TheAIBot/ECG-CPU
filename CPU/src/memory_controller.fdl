@@ -1,24 +1,24 @@
 dp memoryController(in target : ns(4);
-						  in useMem : ns(1);
-						  in RW : ns(1);
-						  in a : tc(32);
-						  in b : tc(32);
-						  in M_dataOut : tc(32);
-						  in M_dataoutrdy : ns(1);
-						  out useBus : ns(1);
-						  out cacheR : ns(1);
-						  out cacheW : ns(1);
-						  out cacheAddress : ns(32);
-						  in cacheOut : tc(32);
-						  out memoryOut : tc(32);
-						  out hasDataFromMemory : ns(1);
-						  out memoryStall : ns(1))
+					  in useMem : ns(1);
+					  in RW : ns(1);
+					  in a : tc(32);
+					  in b : tc(32);
+					  in M_dataOut : tc(32);
+					  in M_dataoutrdy : ns(1);
+					  in cacheOut : tc(32);
+					  out useBus : ns(1);
+					  out cacheR : ns(1);
+					  out cacheW : ns(1);
+					  out cacheAddress : ns(32);
+					  out memoryOut : tc(32);
+					  out hasDataFromMemory : ns(1);
+					  out memoryStall : ns(1))
 {
 	reg stallOnce : ns(1);
     sig isTargetCache : ns(1);
 	always
 	{
-      isTargetCache = (target == 0b0100);
+		isTargetCache = (target == 0b0100);
 		useBus = (useMem & (~isTargetCache));
 		cacheR = (useMem & (isTargetCache) & ~RW);
 		cacheW = (useMem & (isTargetCache) &  RW);
