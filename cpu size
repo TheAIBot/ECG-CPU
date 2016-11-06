@@ -1,0 +1,59 @@
+--alu
+equal2 3
+add32 1
+sub32 1
+sri32 1
+and32 1
+ternary 3
+
+--buscmd
+concat32 1
+
+--cache
+ram32 32
+
+--decoder
+lookup7 1
+
+--memorycontroller
+ternary 2
+equal4 1
+and1 5
+not1 3
+or1 1
+reg1 1
+
+--memoryfetch
+ram32 64
+ternary 2
+add32 1
+convert32 1
+reg32 1
+
+--muxalu
+ternary 1
+convert32 1
+
+--register
+ternary 21
+equal3 21
+reg32 8
+and3 7
+
+--registerstore
+ternary 1
+
+--shouldstall
+and 1 2
+not1 1
+or1 1
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@ dp ALU(in a, b : tc(32);
 		ALUout = sel == 0b00 ? a +  b :
 			     sel == 0b01 ? a -  b :
 			     sel == 0b10 ? a >> b :
-				 	              a & b;
+				 	           a &  b;
 		//$display($dec, "alu = ", ALUout, ", a=", a, ", b=", b,", select=" , sel);
 	}
 }

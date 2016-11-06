@@ -28,6 +28,9 @@ dp PC(in JMP : ns(20);
 dp fetch(in address : ns(5); out odata : ns(32))
 {
 	reg idata : ns(32);
+	always{
+		//$display($dec, "Current instruction line: ", address);
+	}
 	
 	use instmem(address, 0, 1, idata, odata);
 }

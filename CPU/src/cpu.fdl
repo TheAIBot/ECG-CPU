@@ -54,6 +54,7 @@ dp CPU(
 		//$display($dec, "a: ", a, ", b: ", b);
         //$display($bin, "instruction: ", odata);
         //$display($bin, "stall: ", stall);
+		//$display($dec, "cycle: ", $cycle);
 		//$display($dec, " ");
 	}       
 }

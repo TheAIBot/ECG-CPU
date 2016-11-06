@@ -443,13 +443,13 @@ dp bus_toplevel(
 ////////////////////////////
 // Auxiliary units
 ////////////////////////////
-ipblock datamem(in address : ns(12);
+ipblock datamem(in address : ns(14);
           in wr,rd   : ns(1);
           in idata   : ns(32);
           out odata : ns(32)){
 
   iptype "ram";
-  ipparm "size=10001";
+  ipparm "size=11000";
   ipparm "wl=32";
   ipparm "file=datamemory.txt"; // initializes content. File syntax needs to be "addr data "* (the last space can also be a linebreak. NB! Should the students do a manual loading of the RAM to simulate a "real" system or is it ok if they just use this parameter?
   //ipparm "file=sddb48hex2.ecg"; 
@@ -465,7 +465,7 @@ dp DataMem(
    ){
    
    sig wr,rd : ns(1);
-   sig address : ns(12);
+   sig address : ns(14);
    sig idata : ns(32);
    
    reg datainrdyr : ns(1);

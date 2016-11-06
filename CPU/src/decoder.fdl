@@ -28,6 +28,6 @@ dp decoder(in op : ns(3);
 		ALUInstruction = x[2:3];
 		useIntermediate = x[1];
 		storeALU = x[0];
-		//$display($dec, useMem, RW);
+		//$display($bin, x);
 	}
 }
