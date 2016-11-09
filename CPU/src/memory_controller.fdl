@@ -1,27 +1,166 @@
 dp memoryController(in target : ns(4);
 					  in useMem : ns(1);
 					  in RW : ns(1);
+					  in mode : ns(2);
 					  in a : tc(32);
 					  in b : tc(32);
-					  in M_dataOut : tc(32);
-					  in M_dataoutrdy : ns(1);
-					  in cacheOut : tc(32);
+					  in BUS_dataOut : tc(32);
+					  in BUS_dataoutrdy : ns(1);
+					  in CACHE_dataout : tc(32);
+					  in CACHE_dataoutrdy : tc(1);
+					  in MWI_dataout : tc(32);
+					  in MWI_dataoutrdy : tc(1);
 					  out useBus : ns(1);
+					  out useMwiFilter : ns(1);
 					  out cacheR : ns(1);
 					  out cacheW : ns(1);
 					  out cacheAddress : ns(32);
 					  out memoryOut : tc(32);
-					  out hasDataFromMemory : ns(1))
+					  out hasDataFromMemory : ns(1)
+					  out stall : ns(1))
 {
+	//modes
+	//0b00 = async
+	//0b01 = await
+	//0b10 = stall
+	lookup shouldModeStall : (1) = 
+	{
+		0b0,
+		0b1,
+		0b1
+	};
+
+	sig stall : ns(1);
+
+	sig isTargetBus : ns(1);
     sig isTargetCache : ns(1);
+	sig isTargetMwiFilter : ns(1);
+
+	sig busReset : ns(1);
+	sig cacheReset : ns(1);
+	sig mwiReset : ns(1);
+
+	sig busValueArrived : ns(1);
+	sig cacheValueArrived : ns(1);
+	sig mwiValueArrived : ns(1);
+
+	sig busValue : ns(32);
+	sig cacheValue : ns(32);
+	sig mwiValue : ns(32);
+
+	sig busReceivedValue : ns(1);
+	sig cacheReceivedValue : ns(1);
+	sig mwiReceivedValue : ns(1);
+
+	use busBlock(      in busReset,   BUS_dataoutrdy,   BUS_dataOut,   busValueArrived,   busValue);
+	use cacheBlock(    in cacheReset, CACHE_dataoutrdy, CACHE_dataOut, cacheValueArrived, cacheValue);
+	use mwiFilterBlock(in mwiReset,   MWI_dataoutrdy,   MWI_dataOut,   mwiValueArrived,   mwiValue);
+
 	always
 	{
-		isTargetCache = (target == 0b0100);
-		useBus = (useMem & (~isTargetCache));
+		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011);
+		isTargetCache =     (target == 0b0100);
+		isTargetMwiFilter = (target == 0b0101);
+
+		busReceivedValue =   (isTargetBus & busValueArrived);
+		cacheReceivedValue = (isTargetBus & cacheValueArrived);
+		mwiReceivedValue =   (isTargetBus & mwiValueArrived);
+
+		stall = shouldModeStall(mode) & ~(busReceivedValue | cacheReceivedValue | mwiReceivedValue);
+
+		useBus = (useMem & (isTargetBus));
 		cacheR = (useMem & (isTargetCache) & ~RW);
 		cacheW = (useMem & (isTargetCache) &  RW);
-		cacheAddress = (RW) ? b : a;
+		cacheAddress = (RW) ? b : a; 
 		memoryOut = (useBus) ? M_dataOut : cacheOut;
 		hasDataFromMemory = cacheR | M_dataoutrdy;
 	}
 }
+
+dp busBlock(in reset : ns(1);
+			in dataoutrdy : ns(1);
+			in dataout : tc(32);
+			out valueArrived : ns(1);
+			out value : tc(32))
+{
+	reg receivedValue : ns(1);
+	reg storedValue : tc(32);
+
+	sig tempreceivedValue : ns(1);
+	sig tempstoredValue : tc(32);
+
+	always
+	{
+		tempreceivedValue = (dataoutrdy) ? dataoutrdy : receivedValue;
+		storedValue = (dataoutrdy) ? dataout : storedValue;
+
+		receivedValue = (reset) ? 0 : tempreceivedValue;
+		storedValue = (reset) ? 0 : tempstoredValue;
+
+		valueArrived = tempreceivedValue;
+		value = tempstoredValue;
+	}
+}
+
+dp cacheBlock(in reset : ns(1);
+			in dataoutrdy : ns(1);
+			in dataout : tc(32);
+			out valueArrived : ns(1);
+			out value : tc(32))
+{
+	reg receivedValue : ns(1);
+	reg storedValue : tc(32);
+
+	sig tempreceivedValue : ns(1);
+	sig tempstoredValue : tc(32);
+
+	always
+	{
+		tempreceivedValue = (dataoutrdy) ? dataoutrdy : receivedValue;
+		storedValue = (dataoutrdy) ? dataout : storedValue;
+
+		receivedValue = (reset) ? 0 : tempreceivedValue;
+		storedValue = (reset) ? 0 : tempstoredValue;
+
+		valueArrived = tempreceivedValue;
+		value = tempstoredValue;
+	}
+}
+
+dp mwiFilterBlock(in reset : ns(1);
+				in dataoutrdy : ns(1);
+				in dataout : tc(32);
+				out valueArrived : ns(1);
+				out value : tc(32))
+{
+	reg receivedValue : ns(1);
+	reg storedValue : tc(32);
+
+	sig tempreceivedValue : ns(1);
+	sig tempstoredValue : tc(32);
+
+	always
+	{
+		tempreceivedValue = (dataoutrdy) ? dataoutrdy : receivedValue;
+		storedValue = (dataoutrdy) ? dataout : storedValue;
+
+		receivedValue = (reset) ? 0 : tempreceivedValue;
+		storedValue = (reset) ? 0 : tempstoredValue;
+
+		valueArrived = tempreceivedValue;
+		value = tempstoredValue;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
