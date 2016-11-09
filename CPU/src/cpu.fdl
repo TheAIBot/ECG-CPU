@@ -28,11 +28,11 @@ dp CPU(
 	sig cacheOut : tc(32);
 	sig memoryOut : tc(32);
 	sig hasDataFromMemory : ns(1);
-	sig memoryStall : ns(1);
+	sig cacheDone : ns(1);
 
-	use shouldStall(useMem, M_dataoutrdy, useBus, memoryStall, stall);
+	use shouldStall(useMem, M_dataoutrdy, useBus, cacheDone, stall);
 	use PC(odata[0:19], pcJMP, stall, pc_out);
-	use cache(cacheAddress, cacheW, cacheR, a, cacheOut);
+	use cache(cacheAddress, cacheW, cacheR, a, cacheOut, cacheDone);
 	use fetch(pc_out, odata);
 
 	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, useMem, RW);

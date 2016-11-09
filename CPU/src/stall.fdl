@@ -1,11 +1,11 @@
 dp shouldStall(in useMem : ns(1);
 			   in busDone : ns(1);
 			   in useBus : ns(1);
-			   in memoryStall : ns(1);
+			   in cacheDone : ns(1);
 			   out stall : ns(1))
 {
 	always
 	{
-		stall = (useMem & (~busDone) & useBus) | memoryStall;
+		stall = (useMem & (~busDone) & useBus) & ~cacheDone;
 	}
 }
