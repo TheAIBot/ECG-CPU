@@ -7,14 +7,26 @@ dp mwiFilter(in datain : tc(32);
 	reg formerValue : tc(32);
 	reg arrayIndex : ns(5);
 	reg sum : tc(32);
-
 	sig circArrayOut : tc(32);
 	sig indexPP : ns(5);
+	sig writeCircularArray : ns(1);
+	sig readCircularArray : ns(1);
+	use	circularArray(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
 
+    sfg stall
+	{
+		dataoutrdy = 0;
+		dataout = 0;
+		indexPP = arrayIndex;
+		readCircularArray = 0;
+		writeCircularArray = 0;
+	}
 	sfg getDiffrence
 	{
 		difference = datain - formerValue;
-		circularArray(0, 1, arrayIndex, datain, circArrayOut);
+		writeCircularArray = 1;
+		readCircularArray = 0;
+		indexPP = arrayIndex;
 		dataoutrdy = 0;
 		dataout = 0;
 	}
@@ -24,36 +36,39 @@ dp mwiFilter(in datain : tc(32);
 		dataout = (tc(32))sum[5:31];
 		dataoutrdy = 1;
 		indexPP = arrayIndex + 1
-		arrayIndex = indexPP;
-		circularArray(1, 0, indexPP, 0, circArrayOut);
-		formerValue = circArrayOut;
+		arrayIndex = indexPP;		
+		writeCircularArray = 0;
+		readCircularArray = 1;
 	}
-	sfg stall
+	sfg setLoadedValue
 	{
-		dataoutrdy = 0;
-		dataout = 0;
+		formerValue = circArrayOut;
+		writeCircularArray = 0;
+		readCircularArray = 0;
+		indexPP = arrayIndex;
 	}
 }
 
-dp circularArray(in r : ns(1);
-				 in w : ns(1);
-				 in address : ns(5);
-				 in datain : tc(32);
-				 out dataout : tc(32))
+ipblock circularArray(in address : ns(32);
+                      in wr,rd : ns(1);
+                      in idata : tc(32);
+	                  out odata : tc(32))
 {
-
+	iptype "ram";
+	ipparm "size=32";
+	ipparm "wl=32";
+	ipparm "file=cacheMem.txt";
 }
-
-
 
 fsm ucp(mwiFilter)
 {
 	inital sStall;
-	state sCycle1;
+	state sCycle1, sCycle2;
 	
 	@sStall  if(datainrdy) then (getDiffrence) -> sCycle1;
 			 else				(stall)        -> sStall;
-	@sCycle1 					(addSumShift)  -> sStall;
+	@sCycle1 					(addSumShift)  -> sCycle2;
+	@sCycle2                    (setLoadedValue); //And ready for the next round.
 }
 
 

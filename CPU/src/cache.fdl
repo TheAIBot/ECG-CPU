@@ -13,17 +13,3 @@ dp cache(in address : ns(32);
 		cacheDone = wr | rd;
 	}
 }
-
-
-
-
-ipblock cacheRam(in address : ns(32);
-	in wr,rd : ns(1);
-	in idata : tc(32);
-	out odata : tc(32))
-{
-	iptype "ram";
-	ipparm "size=32";
-	ipparm "wl=32";
-	ipparm "file=cacheMem.txt";
-}
