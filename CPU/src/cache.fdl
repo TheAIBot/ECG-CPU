@@ -6,7 +6,6 @@ ipblock cacheRam(in address : ns(32);
 	iptype "ram";
 	ipparm "size=32";
 	ipparm "wl=32";
-	ipparm "file=cacheMem.txt";
 }
 
 dp cache(in address : ns(32);

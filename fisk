@@ -3,15 +3,25 @@ $option "profile_toggle_alledge"
 $option "profile_display_operations"
 //$option "profile_display_cycles"
 
-dp fisk{
+dp fisk(in derp : ns(32); out ll : ns(32)){
 	reg kage : ns(32);
 	always{
-		kage = (4294967295 >> 1) - kage;
+		kage = derp - kage + 57 + (kage >> 1) + (derp << 1);
+		ll = kage;
 		$display($bin, kage);
+	}
+}
+
+dp setfisk(in ll : ns(32); out ss : ns(32))
+{
+	always 
+	{
+		ss = ll - 3;
 	}
 }
 
 system lol
 {
- fisk;
+	setfisk(ll, ee);
+	fisk(ee, ll);
 }
