@@ -1,0 +1,28 @@
+#include "src/ucp.fdl"
+
+dp testUCP  (in datain : tc(32)
+             in datainrdy : ns(1)
+             out dataout : tc(32)
+             out dataoutrdy : ns(1)){
+    always{$display($dec, "In the start, one gets that...")}
+    sfg dataset1In{datain = 0; datainrdy = 1}
+    sfg dataset1Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, "where the expected value was = x, giving: ", dataout == x)}
+    sfg dataset1Wait{dataout = 0; dataoutrdy = 0};
+    
+}
+ 
+ 
+ 
+fsm testBench(testUCP){
+    initial sD1S;
+    state sStall, sD1E, sD1W;
+    @sD1S              (dataset1In)     -> sD1E;
+    @sD1E              (dataset1Out)    -> sD1S;
+    @sD1W              (dataset1Wait)   -> sStall;
+    @sStall            (dataset1Wait)   -> sStall;
+}
+
+system testingSystem{
+    mwiFilter(datain, datainrdy, dataout, dataoutrdy);
+    testUCP(datain, datainrdy, dataout, dataoutrdy);
+}
