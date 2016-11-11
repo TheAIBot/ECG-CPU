@@ -1,22 +1,3 @@
-dp cache(in address : ns(32);
-	in wr,rd : ns(1);
-	in idata : tc(32);
-	out odata : tc(32);
-	out dataoutrdy : ns(1))
-{
-	reg cacheDone : ns(1);
-
-	use cacheRam( address, wr, rd, idata, odata);	
-
-	always
-	{
-		cacheDone = wr | rd;
-	}
-}
-
-
-
-
 ipblock cacheRam(in address : ns(32);
 	in wr,rd : ns(1);
 	in idata : tc(32);
@@ -26,4 +7,22 @@ ipblock cacheRam(in address : ns(32);
 	ipparm "size=32";
 	ipparm "wl=32";
 	ipparm "file=cacheMem.txt";
+}
+
+dp cache(in address : ns(32);
+	in wr,rd : ns(1);
+	in idata : tc(32);
+	in datainrdy : ns(1);
+	out odata : tc(32);
+	out dataoutrdy : ns(1))
+{
+	reg cacheDone : ns(1);
+
+	use cacheRam( address, wr, rd, idata, odata);	
+
+	always
+	{
+		cacheDone = datainrdy;
+		dataoutrdy = cacheDone;
+	}
 }

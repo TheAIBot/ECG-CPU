@@ -23,7 +23,7 @@ dp mwiFilter(in datain : tc(32);
 		sum = sum + difference;
 		dataout = (tc(32))sum[5:31];
 		dataoutrdy = 1;
-		indexPP = arrayIndex + 1
+		indexPP = arrayIndex + 1;
 		arrayIndex = indexPP;
 		circularArray(1, 0, indexPP, 0, circArrayOut);
 		formerValue = circArrayOut;
