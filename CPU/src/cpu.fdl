@@ -35,9 +35,10 @@ dp CPU(
 	sig MWI_dataoutrdy : ns(1);
 	sig enableBus : ns(1);
 	sig enableCache : ns(1);
-	sig enableMWI : ns(1);
+	sig enableMwiFilter : ns(1);
+	sig mwiDatain : tc(32);
 
-	//use shouldStall(useMem, M_dataoutrdy, useBus, cacheDone, stall);
+	//use shouldStall(useMem, BUS_dataoutrdy, useBus, cacheDone, stall);
 	use PC(odata[0:19], pcJMP, stall, pc_out);
 	use cache(cacheAddress, cacheW, cacheR, a, enableCache, CACHE_dataout, CACHE_dataoutrdy);
 	use fetch(pc_out, odata);
@@ -51,8 +52,6 @@ dp CPU(
 
 	use mwiFilter(mwiDatain, enableMwiFilter, MWI_dataout, MWI_dataoutrdy);
 
-	use memoryController(odata[0:3], useMem, RW, a, b, M_dataout, M_dataoutrdy, cacheOut, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
-
 	use memoryController(odata[0:3], useMem, RW, odata[4:5], a, b, BUS_dataout, BUS_dataoutrdy, CACHE_dataout, CACHE_dataoutrdy, MWI_dataout, MWI_dataoutrdy, enableBus, enableMwiFilter, enableCache, cacheR, cacheW, cacheAddress, mwiDatain, memoryOut, hasDataFromMemory, stall);
 
 
@@ -65,9 +64,10 @@ dp CPU(
 		//$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
 		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
 		//$display($dec, "a: ", a, ", b: ", b);
-        //$display($bin, "instruction: ", odata);
+        $display($bin, "instruction: ", odata);
         //$display($bin, "stall: ", stall);
 		//$display($dec, "cycle: ", $cycle);
+		$display($dec, "M_datain: ", M_datain, " M_datainrdy: ", M_datainrdy, " BUS_dataout: ", BUS_dataout, $bin, " CMD: ", M_cmd);
 		//$display($dec, " ");
 	}       
 }
