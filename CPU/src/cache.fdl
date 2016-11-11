@@ -1,6 +1,17 @@
+ipblock cacheRam(in address : ns(32);
+	in wr,rd : ns(1);
+	in idata : tc(32);
+	out odata : tc(32))
+{
+	iptype "ram";
+	ipparm "size=32";
+	ipparm "wl=32";
+}
+
 dp cache(in address : ns(32);
 	in wr,rd : ns(1);
 	in idata : tc(32);
+	in datainrdy : ns(1);
 	out odata : tc(32);
 	out dataoutrdy : ns(1))
 {
@@ -10,6 +21,7 @@ dp cache(in address : ns(32);
 
 	always
 	{
-		cacheDone = wr | rd;
+		cacheDone = datainrdy;
+		dataoutrdy = cacheDone;
 	}
 }

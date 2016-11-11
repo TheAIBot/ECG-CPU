@@ -2,8 +2,8 @@ dp CPU(
            out M_datain : ns(32);
            out M_cmd : ns(32);
            out M_datainrdy : ns(1);
-           in M_dataout : ns(32);
-           in M_dataoutrdy : ns(1)
+           in BUS_dataout : ns(32);
+           in BUS_dataoutrdy : ns(1)
            //in stall_cpu : ns(1)
        )
 {
@@ -29,10 +29,17 @@ dp CPU(
 	sig memoryOut : tc(32);
 	sig hasDataFromMemory : ns(1);
 	sig cacheDone : ns(1);
+	sig CACHE_dataout : tc(32);
+	sig CACHE_dataoutrdy : ns(1);
+	sig MWI_dataout : tc(32);
+	sig MWI_dataoutrdy : ns(1);
+	sig enableBus : ns(1);
+	sig enableCache : ns(1);
+	sig enableMWI : ns(1);
 
-	use shouldStall(useMem, M_dataoutrdy, useBus, cacheDone, stall);
+	//use shouldStall(useMem, M_dataoutrdy, useBus, cacheDone, stall);
 	use PC(odata[0:19], pcJMP, stall, pc_out);
-	use cache(cacheAddress, cacheW, cacheR, a, cacheOut, cacheDone);
+	use cache(cacheAddress, cacheW, cacheR, a, enableCache, CACHE_dataout, CACHE_dataoutrdy);
 	use fetch(pc_out, odata);
 
 	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, useMem, RW);
@@ -42,13 +49,19 @@ dp CPU(
 	use mux_ALU_b(b, odata[0:19], useIntermediate, correctB);
 	use ALU(a, correctB, ALUInstruction, ALUout);
 
+	use mwiFilter(mwiDatain, enableMwiFilter, MWI_dataout, MWI_dataoutrdy);
+
 	use memoryController(odata[0:3], useMem, RW, a, b, M_dataout, M_dataoutrdy, cacheOut, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
+
+	use memoryController(odata[0:3], useMem, RW, odata[4:5], a, b, BUS_dataout, BUS_dataoutrdy, CACHE_dataout, CACHE_dataoutrdy, MWI_dataout, MWI_dataoutrdy, enableBus, enableMwiFilter, enableCache, cacheR, cacheW, cacheAddress, mwiDatain, memoryOut, hasDataFromMemory, stall);
+
+
 	use busCMD(odata[0:3], RW, b, M_cmd);
 
    	always
 	{
    		M_datain = a;
-   		M_datainrdy = useBus;
+   		M_datainrdy = enableBus;
 		//$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
 		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
 		//$display($dec, "a: ", a, ", b: ", b);

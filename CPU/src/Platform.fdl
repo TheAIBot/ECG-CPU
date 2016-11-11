@@ -9,6 +9,7 @@
 #include "cache.fdl"
 #include "memory_controller.fdl"
 #include "cpu.fdl"
+#include "ucp.fdl"
 
 //$option "vcd"
 
