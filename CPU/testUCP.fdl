@@ -1,25 +1,130 @@
 #include "src/ucp.fdl"
 
-dp testUCP  (in datain : tc(32)
-             in datainrdy : ns(1)
-             out dataout : tc(32)
-             out dataoutrdy : ns(1)){
-    always{$display($dec, "In the start, one gets that...")}
-    sfg dataset1In{datain = 0; datainrdy = 1}
-    sfg dataset1Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, "where the expected value was = x, giving: ", dataout == x)}
-    sfg dataset1Wait{dataout = 0; dataoutrdy = 0};
-    
+dp testUCP  (out datain : tc(32);
+             out datainrdy : ns(1);
+             in dataout : tc(32);
+             in dataoutrdy : ns(1)){
+    //1
+    sfg dataset1In{datain = 15; datainrdy = 1;}
+    sfg dataset1Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset1Wait{datain = 0; datainrdy = 0;}   
+    //2
+    sfg dataset2In{datain = 32; datainrdy = 1;}
+    sfg dataset2Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset2Wait{datain = 0; datainrdy = 0;}    
+    //3
+    sfg dataset3In{datain = 19; datainrdy = 1;}
+    sfg dataset3Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset3Wait{datain = 0; datainrdy = 0;}    
+    //4
+    sfg dataset4In{datain = 0; datainrdy = 1;}
+    sfg dataset4Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset4Wait{datain = 0; datainrdy = 0;}    
+    //5
+    sfg dataset5In{datain = 0; datainrdy = 1;}
+    sfg dataset5Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset5Wait{datain = 0; datainrdy = 0;}    
+    //6
+    sfg dataset6In{datain = 0; datainrdy = 1;}
+    sfg dataset6Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset6Wait{datain = 0; datainrdy = 0;}    
+    //7
+    sfg dataset7In{datain = 0; datainrdy = 1;}
+    sfg dataset7Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset7Wait{datain = 0; datainrdy = 0;}    
+    //8
+    sfg dataset8In{datain = 0; datainrdy = 1;}
+    sfg dataset8Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset8Wait{datain = 0; datainrdy = 0;}    
+    //9
+    sfg dataset9In{datain = 0; datainrdy = 1;}
+    sfg dataset9Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset9Wait{datain = 0; datainrdy = 0;}    
+    //10
+    sfg dataset10In{datain = 1; datainrdy = 1;}
+    sfg dataset10Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset10Wait{datain = 0; datainrdy = 0;}    
+    //11
+    sfg dataset11In{datain = 2; datainrdy = 1;}
+    sfg dataset11ut{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset11Wait{datain = 0; datainrdy = 0;}   
+    //12
+    sfg dataset12In{datain = 3; datainrdy = 1;}
+    sfg dataset12Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset12Wait{datain = 0; datainrdy = 0;}   
+    //13
+    sfg dataset13In{datain = 4; datainrdy = 1;}
+    sfg dataset13Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset13Wait{datain = 0; datainrdy = 0;}   
+    //14
+    sfg dataset14In{datain = 5; datainrdy = 1;}
+    sfg dataset14Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset14Wait{datain = 0; datainrdy = 0;}   
+    //15
+    sfg dataset15In{datain = 6; datainrdy = 1;}
+    sfg dataset15Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset15Wait{datain = 0; datainrdy = 0;}   
+    //16
+    sfg dataset16In{datain = 7; datainrdy = 1;}
+    sfg dataset16Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset16Wait{datain = 0; datainrdy = 0;}   
+    //17
+    sfg dataset17In{datain = 7; datainrdy = 1;}
+    sfg dataset17Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset17Wait{datain = 0; datainrdy = 0;}   
+    //18
+    sfg dataset18In{datain = 7; datainrdy = 1;}
+    sfg dataset18Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset18Wait{datain = 0; datainrdy = 0;}   
+    //19
+    sfg dataset19In{datain = 7; datainrdy = 1;}
+    sfg dataset19Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset19Wait{datain = 0; datainrdy = 0;}   
+    //20
+    sfg dataset20In{datain = 11; datainrdy = 1;}
+    sfg dataset20Out{$display("For dataset1, one gets that: dataout = ", $dec, dataout, ", where the expected value was = x, giving: ", dataout == 2);
+                    datain = 0; datainrdy = 0;}
+    sfg dataset20Wait{datain = 0; datainrdy = 0;}   
+
 }
  
  
  
 fsm testBench(testUCP){
     initial sD1S;
-    state sStall, sD1E, sD1W;
+    state sStall, sD1E, sD1W, sD2S, sD2E, sD2W, sD3S, sD3E, sD3W;
+    //1
     @sD1S              (dataset1In)     -> sD1E;
-    @sD1E              (dataset1Out)    -> sD1S;
-    @sD1W              (dataset1Wait)   -> sStall;
-    @sStall            (dataset1Wait)   -> sStall;
+    @sD1E              (dataset1Out)    -> sD1W;
+    @sD1W              (dataset1Wait)   -> sD2S;
+    //2
+    @sD2S              (dataset2In)     -> sD2E;
+    @sD2E              (dataset2Out)    -> sD2W;
+    @sD2W              (dataset2Wait)   -> sD3S;
+    //3
+    @sD3S              (dataset3In)     -> sD3E;
+    @sD3E              (dataset3Out)    -> sD3W;
+    @sD3W              (dataset3Wait)   -> sStall;
+    @sStall            (dataset3Wait)   -> sStall;
 }
 
 system testingSystem{
