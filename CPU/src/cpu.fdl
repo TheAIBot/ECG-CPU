@@ -69,10 +69,10 @@ dp CPU(
 		//$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
 		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
 		//$display($dec, "a: ", a, ", b: ", b);
-        $display($bin, "instruction: ", odata);
+        //$display($bin, "instruction: ", odata);
         //$display($bin, "stall: ", stall);
 		//$display($dec, "cycle: ", $cycle);
-		$display($dec, "M_datain: ", M_datain, " M_datainrdy: ", M_datainrdy, " BUS_dataout: ", BUS_dataout, $bin, " CMD: ", M_cmd);
+		//$display($dec, "M_datain: ", M_datain, " M_datainrdy: ", M_datainrdy, " BUS_dataout: ", BUS_dataout, $bin, " CMD: ", M_cmd);
 		//$display($dec, " ");
 	}       
 }

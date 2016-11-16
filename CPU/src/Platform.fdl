@@ -3,7 +3,6 @@
 #include "memory_fetch.fdl"
 #include "mux_ALU_b.fdl"
 #include "register.fdl"
-#include "busCMD.fdl"
 #include "registerStore.fdl"
 #include "stall.fdl"
 #include "cache.fdl"
