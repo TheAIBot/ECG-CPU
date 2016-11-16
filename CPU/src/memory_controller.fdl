@@ -7,12 +7,13 @@ dp rsflipflop_size_1(in set : ns(1);
 	sig i : ns(1);
 	always
 	{
-		i = (set) ?   input : 
-			(reset) ? 0 :
-					  storing;
+		i = 	 (reset  & set)?  0:
+				 (reset  & ~set)? 0:
+				 (~reset & set)? input: storing;	
 		storing = i;
-		output = (reset & ~set) ? storing : i;
-					
+		output = (reset  & set)? input:
+				 (reset  & ~set)? 0   :
+				 (~reset & set)? input: storing;	
 	}
 }
 
@@ -25,19 +26,21 @@ dp rsflipflop_size_32(in set : ns(1);
 	sig i : tc(32);
 	always
 	{
-		i = (set) ?   input : 
-			(reset) ? 0 :
-					  storing;
+		i = 	 (reset  & set)?  0:
+				 (reset  & ~set)? 0:
+				 (~reset & set)? input: storing;
 		storing = i;
-		output = (reset & ~set) ? storing : i;
+		output = (reset  & set)? input:
+				 (reset  & ~set)? 0   :
+				 (~reset & set)? input: storing;
 					
 	}
 }
 
 //busBlock rsflipflops
 dp rsflipflop1_size_1 : rsflipflop_size_1
-dp rsflipflop2_size_1 : rsflipflop_size_1
 dp rsflipflop1_size_32 : rsflipflop_size_32
+dp rsflipflop2_size_1 : rsflipflop_size_1
 dp rsflipflop2_size_32 : rsflipflop_size_32
 
 //cacheBlock rsflipflops
@@ -72,8 +75,9 @@ dp busBlock(in reset : ns(1);
 
 	always
 	{
-		$display($dec, "busBlock ", "set: ", dataoutrdy, "input: ", dataout, " reset: ", reset, " output: ", value);
-		//$display($dec, "active: ", active, " activity: ", activity, " enabled: ", enabled);
+		//$display($dec, "busBlock rdy     ", "set: ", dataoutrdy, " input: ", 1, " reset: ", reset, " output: ", valueArrived);
+		//$display($dec, "busBlock dataout ", "set: ", dataoutrdy, " input: ", dataout, " reset: ", reset, " output: ", value);
+		//$display($dec, "busBlock datain  ", "set: ", set, " input: ", idatain, " reset: ", dataoutrdy, " output: ", odatain);
 	}
 }
 
@@ -260,10 +264,10 @@ dp memoryController(in target : ns(4);
 
 
 	
-		$display($dec, "memoryOut: ", memoryOut, " hasDataFromMemory: ", hasDataFromMemory, " stall: ", stall, " mode: ", mode, " shouldEnable: ", shouldEnable(mode));
-		$display($dec, "BUS_dataout:   ", BUS_dataout, " BUS_dataoutrdy:   ", BUS_dataoutrdy, " reset: ", busReset, " BUS_datainrdy:   ", BUS_datainrdy, " BUS_enable:   ", busEnable);
-		$display($dec, "CACHE_dataout: ", CACHE_dataout, " CACHE_dataoutrdy: ", CACHE_dataoutrdy, " reset: ", cacheReset, " CACHE_datainrdy: ", CACHE_datainrdy, " CACHE_enable: ", cacheEnable);
-		$display($dec, "MWI_dataout:   ", MWI_dataout, " MWI_dataoutrdy:   ", MWI_dataoutrdy, " reset: ", mwiReset, " MWI_datainrdy:   ", MWI_datainrdy, " MWI_enable:   ", mwiEnable);
+		//$display($dec, "memoryOut: ", memoryOut, " hasDataFromMemory: ", hasDataFromMemory, " stall: ", stall, " mode: ", mode, " shouldEnable: ", shouldEnable(mode));
+		//$display($dec, "BUS_dataout:   ", BUS_dataout, " BUS_dataoutrdy:   ", BUS_dataoutrdy, " reset: ", busReset, " BUS_datainrdy:   ", BUS_datainrdy, " BUS_enable:   ", busEnable);
+		//$display($dec, "CACHE_dataout: ", CACHE_dataout, " CACHE_dataoutrdy: ", CACHE_dataoutrdy, " reset: ", cacheReset, " CACHE_datainrdy: ", CACHE_datainrdy, " CACHE_enable: ", cacheEnable);
+		//$display($dec, "MWI_dataout:   ", MWI_dataout, " MWI_dataoutrdy:   ", MWI_dataoutrdy, " reset: ", mwiReset, " MWI_datainrdy:   ", MWI_datainrdy, " MWI_enable:   ", mwiEnable);
 	}
 }
 
