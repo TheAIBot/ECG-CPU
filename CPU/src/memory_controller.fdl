@@ -223,9 +223,9 @@ dp memoryController(in target : ns(4);
 
 	always
 	{
-		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011);
+		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | (target == 0b0101);//(*)
 		isTargetCache =     (target == 0b0100);
-		isTargetMwiFilter = (target == 0b0101);
+		isTargetMwiFilter = (target == 0b0110); //(*)Temp set to 6 instead of 5
 
 		busReceivedValue =   (isTargetBus 		& busValueArrived);
 		cacheReceivedValue = (isTargetCache 	& cacheValueArrived);
@@ -236,11 +236,11 @@ dp memoryController(in target : ns(4);
 		stall = useMem & stallMode & ~(busReceivedValue | cacheReceivedValue | mwiReceivedValue);
 
 		busReset =   useMem & stallMode   & isTargetBus;
-		cacheReset = useMem & stallMode & isTargetCache;
+		cacheReset = useMem & stallMode   & isTargetCache;
 		mwiReset =   useMem & stallMode   & isTargetMwiFilter;
 
 		useBus =   useMem & shouldEnable(mode) & isTargetBus;
-		useCache = useMem & 					 isTargetCache;
+		useCache = useMem & 			 isTargetCache;
 		useMwi =   useMem & shouldEnable(mode) & isTargetMwiFilter;
 
 		busEnable = useBus;

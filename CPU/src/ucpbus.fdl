@@ -1,4 +1,4 @@
-ipblock circularArray(in address : ns(32);
+ipblock circularArrayBus(in address : ns(32);
                       in wr,rd : ns(1);
                       in idata : tc(32);
 	              out odata : tc(32))
@@ -8,7 +8,7 @@ ipblock circularArray(in address : ns(32);
 	ipparm "wl=32";
 }
 
-dp mwiFilter(in datain : tc(32);
+dp mwiFilterBus(	 in datain : tc(32);
 			 in datainrdy : ns(1);
 			 out dataout : tc(32);
 			 out dataoutrdy : ns(1))
@@ -23,7 +23,7 @@ dp mwiFilter(in datain : tc(32);
 	sig writeCircularArray : ns(1);
 	sig readCircularArray : ns(1);
 	sig updatedSum : tc(32);
-	use circularArray(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
+	use circularArrayBus(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
 	//always{
 		//$display("");//newline
 		//$display($dec, "Cycle = ", $cycle);
@@ -67,7 +67,7 @@ dp mwiFilter(in datain : tc(32);
 	}
 }
 
-fsm ucp(mwiFilter){
+fsm ucpBus(mwiFilterBus){
 	initial sStall;
 	state sCycle2;
 	
