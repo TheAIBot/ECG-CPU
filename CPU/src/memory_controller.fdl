@@ -1,41 +1,136 @@
-dp busBlock(in reset : ns(1);
-			in activity : ns(1);
-			in dataoutrdy : ns(1);
-			in dataout : tc(32);
-			out valueArrived : ns(1);
-			out value : tc(32);
-			out datainrdy : ns(1))
+dp rsflipflop_size_1(in set : ns(1);
+			  		 in input : ns(1);
+					 in reset : ns(1);
+					 out output : ns(1))
 {
-	reg active : ns(1);
-	reg enabled : ns(1);
-
-	reg receivedValue : ns(1);
-	reg storedValue : tc(32);
-
-	sig tempreceivedValue : ns(1);
-	sig tempstoredValue : tc(32);
-
+	reg storing : ns(1);
+	sig i : ns(1);
 	always
 	{
-		tempreceivedValue = (dataoutrdy) ? dataoutrdy : receivedValue;
-		tempstoredValue = (dataoutrdy) ? dataout : storedValue;
-
-		receivedValue = (reset) ? 0 : tempreceivedValue;
-		storedValue = (reset) ? 0 : tempstoredValue;
-
-		valueArrived = tempreceivedValue;
-		value = tempstoredValue;
-
-		active = (active & ~reset | (active & ~(dataoutrdy | receivedValue))) ? active : activity;
-
-		enabled = (activity) ? 1 : ~dataoutrdy & active;
-		datainrdy = (activity) ? 1 : enabled;
-		$display($dec, "active: ", active, " activity: ", activity, " enabled: ", enabled);
+		i = (set) ?   input : 
+			(reset) ? 0 :
+					  storing;
+		storing = i;
+		output = (reset & ~set) ? storing : i;
+					
 	}
 }
 
-dp cacheBlock : busBlock
-dp mwiFilterBlock : busBlock
+dp rsflipflop_size_32(in set : ns(1);
+			  		 in input : tc(32);
+					 in reset : ns(1);
+					 out output : tc(32))
+{
+	reg storing : tc(32);
+	sig i : tc(32);
+	always
+	{
+		i = (set) ?   input : 
+			(reset) ? 0 :
+					  storing;
+		storing = i;
+		output = (reset & ~set) ? storing : i;
+					
+	}
+}
+
+//busBlock rsflipflops
+dp rsflipflop1_size_1 : rsflipflop_size_1
+dp rsflipflop2_size_1 : rsflipflop_size_1
+dp rsflipflop1_size_32 : rsflipflop_size_32
+dp rsflipflop2_size_32 : rsflipflop_size_32
+
+//cacheBlock rsflipflops
+dp rsflipflop3_size_1 : rsflipflop_size_1
+dp rsflipflop3_size_32 : rsflipflop_size_32
+
+//mwiFilterBlock rsflipflops
+dp rsflipflop4_size_1 : rsflipflop_size_1
+dp rsflipflop4_size_32 : rsflipflop_size_32
+
+
+dp busBlock(in reset : ns(1);
+			in set : ns(1);
+			in dataoutrdy : ns(1);
+			in dataout : tc(32);
+			in idatain : tc(32);
+			in icmd : tc(32);
+			out valueArrived : ns(1);
+			out value : tc(32);
+			out datainrdy : ns(1);
+			out odatain : tc(32);
+			out ocmd : ns(32))
+{
+	//output
+	use rsflipflop1_size_1( set, 1,       dataoutrdy, datainrdy);
+	use rsflipflop_size_32( set, idatain, dataoutrdy, odatain);
+	use rsflipflop1_size_32(set, icmd,    dataoutrdy, ocmd);
+
+	//input
+	use rsflipflop2_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use rsflipflop2_size_32(dataoutrdy, dataout, reset, value);
+
+	always
+	{
+		$display($dec, "busBlock ", "set: ", dataoutrdy, "input: ", dataout, " reset: ", reset, " output: ", value);
+		//$display($dec, "active: ", active, " activity: ", activity, " enabled: ", enabled);
+	}
+}
+
+dp cacheBlock(in reset : ns(1);
+			in set : ns(1);
+			in dataoutrdy : ns(1);
+			in dataout : tc(32);
+			in idatain : tc(32);
+			out valueArrived : ns(1);
+			out value : tc(32);
+			out datainrdy : ns(1);
+			out odatain : tc(32))
+{
+	//input
+	use rsflipflop3_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use rsflipflop3_size_32(dataoutrdy, dataout, reset, value);
+
+	always
+	{
+		datainrdy = set;
+		odatain = idatain;
+		//$display($dec, "active: ", active, " activity: ", activity, " enabled: ", enabled);
+	}
+}
+
+dp mwiFilterBlock(in reset : ns(1);
+			in set : ns(1);
+			in dataoutrdy : ns(1);
+			in dataout : tc(32);
+			in idatain : tc(32);
+			out valueArrived : ns(1);
+			out value : tc(32);
+			out datainrdy : ns(1);
+			out odatain : tc(32))
+{
+	//input
+	use rsflipflop4_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use rsflipflop4_size_32(dataoutrdy, dataout, reset, value);
+
+	always
+	{
+		datainrdy = set;
+		odatain = idatain;
+		//$display($dec, "active: ", active, " activity: ", activity, " enabled: ", enabled);
+	}
+}
+
+dp busCMD(in target : ns(4);
+		  in RW : ns(1);
+		  in address : ns(32);
+		  out M_CMD : ns(32))
+{
+	always
+	{
+		M_CMD = target # RW # address[0:26];
+	}
+}
 
 dp memoryController(in target : ns(4);
 					  in useMem : ns(1);
@@ -55,10 +150,13 @@ dp memoryController(in target : ns(4);
 					  out cacheR : ns(1);
 					  out cacheW : ns(1);
 					  out cacheAddress : ns(32);
-					  out mwiDatain : tc(32);
 					  out memoryOut : tc(32);
 					  out hasDataFromMemory : ns(1);
-					  out stall : ns(1))
+					  out stall : ns(1);
+					  out BUS_CMD : tc(32);
+					  out BUS_datain : tc(32);
+					  out CACHE_datain : tc(32);
+					  out MWI_datain : tc(32))
 {
 	//modes
 	//0b00 = async
@@ -110,9 +208,18 @@ dp memoryController(in target : ns(4);
 	sig useCache : ns(1);
 	sig useMwi : ns(1);
 
-	use busBlock(busReset, busEnable,   BUS_dataoutrdy,   BUS_dataout,   busValueArrived,   busValue, BUS_datainrdy);
-	use cacheBlock(cacheReset, cacheEnable, CACHE_dataoutrdy, CACHE_dataout, cacheValueArrived, cacheValue, CACHE_datainrdy);
-	use mwiFilterBlock(mwiReset, mwiEnable,   MWI_dataoutrdy,   MWI_dataout,   mwiValueArrived,   mwiValue, MWI_datainrdy);
+	sig internBusCmd : tc(32);
+
+	use busBlock(busReset, busEnable, BUS_dataoutrdy, BUS_dataout, a, internBusCmd, busValueArrived, busValue, BUS_datainrdy, BUS_datain, BUS_CMD);
+
+
+	use cacheBlock(cacheReset, cacheEnable, CACHE_dataoutrdy, CACHE_dataout, a, cacheValueArrived, cacheValue, CACHE_datainrdy, CACHE_datain);
+
+	use mwiFilterBlock(mwiReset, mwiEnable, MWI_dataoutrdy, MWI_dataout, a, mwiValueArrived, mwiValue, MWI_datainrdy, MWI_datain);
+
+
+
+	use busCMD(target, RW, b, internBusCmd);
 
 	always
 	{
@@ -144,10 +251,9 @@ dp memoryController(in target : ns(4);
 		cacheAddress = (RW) ? b : a; 
 
 		mwiEnable = useMwi;
-		mwiDatain = a;
 
-		memoryOut = (BUS_dataoutrdy)   ? busValue : 
-					(CACHE_dataoutrdy) ? cacheValue :
+		memoryOut = (busReceivedValue)   ? busValue : 
+					(cacheReceivedValue) ? cacheValue :
 										 mwiValue;
 		hasDataFromMemory = useMem & (busReceivedValue | cacheReceivedValue | mwiReceivedValue);
 
@@ -160,7 +266,6 @@ dp memoryController(in target : ns(4);
 		$display($dec, "MWI_dataout:   ", MWI_dataout, " MWI_dataoutrdy:   ", MWI_dataoutrdy, " reset: ", mwiReset, " MWI_datainrdy:   ", MWI_datainrdy, " MWI_enable:   ", mwiEnable);
 	}
 }
-
 
 
 
