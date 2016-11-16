@@ -35,11 +35,19 @@ dp CPU(
 	sig MWI_dataoutrdy : ns(1);
 	sig enableBus : ns(1);
 	sig enableCache : ns(1);
-	sig enableMWI : ns(1);
+	sig enableMwiFilter : ns(1);
+	sig mwiDatain : tc(32);
+	sig CACHE_datain : tc(32);
+	sig CACHE_datainrdy : ns(1);
+	sig MWI_datain : tc(32);
+	sig MWI_datainrdy : ns(1);
+	sig BUS_datainrdy : ns(1);
+	sig BUS_CMD : tc(32);
+	sig BUS_datain : tc(32);
 
-	//use shouldStall(useMem, M_dataoutrdy, useBus, cacheDone, stall);
+	//use shouldStall(useMem, BUS_dataoutrdy, useBus, cacheDone, stall);
 	use PC(odata[0:19], pcJMP, stall, pc_out);
-	use cache(cacheAddress, cacheW, cacheR, a, enableCache, CACHE_dataout, CACHE_dataoutrdy);
+	use cache(cacheAddress, cacheW, cacheR, CACHE_datain, CACHE_datainrdy, CACHE_dataout, CACHE_dataoutrdy);
 	use fetch(pc_out, odata);
 
 	use decoder(odata[29:31], pcJMP, ALUInstruction, useIntermediate, storeALU, useMem, RW);
@@ -49,25 +57,22 @@ dp CPU(
 	use mux_ALU_b(b, odata[0:19], useIntermediate, correctB);
 	use ALU(a, correctB, ALUInstruction, ALUout);
 
-	use mwiFilter(mwiDatain, enableMwiFilter, MWI_dataout, MWI_dataoutrdy);
+	use mwiFilter(MWI_datain, MWI_datainrdy, MWI_dataout, MWI_dataoutrdy);
 
-	use memoryController(odata[0:3], useMem, RW, a, b, M_dataout, M_dataoutrdy, cacheOut, useBus, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, memoryStall);
-
-	use memoryController(odata[0:3], useMem, RW, odata[4:5], a, b, BUS_dataout, BUS_dataoutrdy, CACHE_dataout, CACHE_dataoutrdy, MWI_dataout, MWI_dataoutrdy, enableBus, enableMwiFilter, enableCache, cacheR, cacheW, cacheAddress, mwiDatain, memoryOut, hasDataFromMemory, stall);
-
-
-	use busCMD(odata[0:3], RW, b, M_cmd);
+	use memoryController(odata[0:3], useMem, RW, odata[4:5], a, b, BUS_dataout, BUS_dataoutrdy, CACHE_dataout, CACHE_dataoutrdy, MWI_dataout, MWI_dataoutrdy, BUS_datainrdy, CACHE_datainrdy, MWI_datainrdy, cacheR, cacheW, cacheAddress, memoryOut, hasDataFromMemory, stall, BUS_CMD, BUS_datain, CACHE_datain, MWI_datain);
 
    	always
 	{
-   		M_datain = a;
-   		M_datainrdy = enableBus;
+   		M_datain = BUS_datain;
+   		M_datainrdy = BUS_datainrdy;
+		M_cmd = BUS_CMD;
 		//$display($dec, "M_dataout= ", M_dataout, " M_dataoutrdy= ", M_dataoutrdy, " M_datain= ", M_datain, " M_datainrdy =", M_datainrdy, $bin, " cmd= ", M_cmd);
 		//$display($dec, "cache address: ", cacheAddress, " wr: ", cacheW, " rd: ", cacheR, " idata: ", a, " odata: ", cacheOut, " memoryOut: ", memoryOut);
 		//$display($dec, "a: ", a, ", b: ", b);
-        //$display($bin, "instruction: ", odata);
+        $display($bin, "instruction: ", odata);
         //$display($bin, "stall: ", stall);
 		//$display($dec, "cycle: ", $cycle);
+		$display($dec, "M_datain: ", M_datain, " M_datainrdy: ", M_datainrdy, " BUS_dataout: ", BUS_dataout, $bin, " CMD: ", M_cmd);
 		//$display($dec, " ");
 	}       
 }

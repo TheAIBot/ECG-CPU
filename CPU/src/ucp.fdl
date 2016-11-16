@@ -24,12 +24,11 @@ dp mwiFilter(in datain : tc(32);
 	sig readCircularArray : ns(1);
 	sig updatedSum : tc(32);
 	use	circularArray(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
-
 	always{	
-		$display("");//newline
-		$display($dec, "Cycle = ", $cycle);
-		$display($dec, "    In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
-		$display($dec, "    Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
+		//$display("");//newline
+		//$display($dec, "Cycle = ", $cycle);
+		//$display($dec, "    In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
+		//$display($dec, "    Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
 	}
 	sfg stall{ //Though it stalls, it calculates the values for cycle 1.
 		hasDataIn = datainrdy;
@@ -58,6 +57,13 @@ dp mwiFilter(in datain : tc(32);
 		hasDataIn = 0;		
 		dataoutrdy = 0;
 		dataout = 0;
+	}
+
+	always
+	{	
+		//$display($dec, "Cycle = ", $cycle);
+		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
+		//$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
 	}
 }
 

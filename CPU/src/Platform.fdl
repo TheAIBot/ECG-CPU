@@ -8,8 +8,9 @@
 #include "stall.fdl"
 #include "cache.fdl"
 #include "memory_controller.fdl"
-#include "cpu.fdl"
 #include "ucp.fdl"
+
+#include "cpu.fdl"
 
 //$option "vcd"
 

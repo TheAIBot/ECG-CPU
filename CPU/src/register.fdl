@@ -46,6 +46,6 @@ dp registers(in asel, bsel : ns(3);
 
 
 		//$display($dec, "asel: ", asel, " bsel: ", bsel, " storeenable: ", storeenable, " storesel: ", storesel, " storedata: ", storedata);
-		//$display($dec, " r1= ", r1," r2= ", r2," r3= ", r3," r4= ", r4," r5= ", r5," r6= ", r6," r7= ", r7);
+		$display($dec, " r1= ", r1," r2= ", r2," r3= ", r3," r4= ", r4," r5= ", r5," r6= ", r6," r7= ", r7);
 	}
 }
