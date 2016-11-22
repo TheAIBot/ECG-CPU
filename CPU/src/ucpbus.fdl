@@ -11,12 +11,15 @@ ipblock circularArrayBus(in address : ns(32);
 dp mwiFilterBus(	 in datain : tc(32);
 			 in datainrdy : ns(1);
 			 out dataout : tc(32);
-			 out dataoutrdy : ns(1))
+			 out dataoutrdy : ns(1);
+			 in stall : ns(1))
 {
 	reg difference : tc(32);
 	reg formerValue : tc(32);
 	reg arrayIndex : ns(5);
 	reg sum : tc(32);
+	reg stallReg : ns(1);
+	reg dataoutReg : tc(32); //Added(*)
 	sig circArrayOut : tc(32);
 	sig indexPP : ns(5);	
 	reg hasDataIn : ns (1);
@@ -38,16 +41,19 @@ dp mwiFilterBus(	 in datain : tc(32);
 		indexPP = arrayIndex;
 		dataoutrdy = 0;
 		dataout = 0;
+		stallReg = stall;
 	}
 	sfg addSumShift{
 		updatedSum = sum + difference;
 		dataout = (tc(32))updatedSum[5:31];
+		dataoutReg = (tc(32))updatedSum[5:31];
 		sum = updatedSum;
-		dataoutrdy = 1;
+		dataoutrdy = stallReg == 0;
 		indexPP = arrayIndex + 1;
 		arrayIndex = indexPP;		
 		writeCircularArray = 0;
 		readCircularArray = 1;
+		stallReg = stall;
 	}
 	sfg setLoadedValue{
 		formerValue = circArrayOut;
@@ -55,15 +61,28 @@ dp mwiFilterBus(	 in datain : tc(32);
 		readCircularArray = 0;
 		indexPP = arrayIndex;
 		hasDataIn = 0;		
-		dataoutrdy = 0;
-		dataout = 0;
+		dataoutrdy = stallReg == 0;
+		dataout = dataoutReg;
+		stallReg = stall;
+	}
+	sfg awaithandshake{
+		dataoutrdy = stallReg == 0;
+		dataout = dataoutReg;
+		hasDataIn = hasDataIn;
+		difference = difference;
+		stallReg = stall;
+
+		//circularArrayBus needs to get it's inputs
+		indexPP = arrayIndex;
+		writeCircularArray = 0;
+		readCircularArray = 0;
 	}
 
 	always
-	{	
-		//$display($dec, "Cycle = ", $cycle);
-		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
-		//$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
+	{			
+		$display($dec, "Cycle = ", $cycle);
+		$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy, ", stall = ", stall);
+		$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
 	}
 }
 
@@ -71,9 +90,10 @@ fsm ucpBus(mwiFilterBus){
 	initial sStall;
 	state sCycle2;
 	
-	@sStall  if(hasDataIn) then (addSumShift) -> sCycle2;
-			 else				(stall)        -> sStall;
-	@sCycle2 					(setLoadedValue)  -> sStall; //And ready for the next round.
+	@sStall  if(hasDataIn)     then 		(addSumShift)  		-> sCycle2;
+		 else				    	(stall)        		-> sStall;
+	@sCycle2 if(stallReg == 1) then			(awaithandshake)	-> sCycle2;					
+		 else 					(setLoadedValue)  	-> sStall; //And ready for the next round.
 }
 
 
