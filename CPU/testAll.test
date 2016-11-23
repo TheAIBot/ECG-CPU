@@ -1,0 +1,7 @@
+#!/bin/bash
+./testALU.test
+./testDecoder.test
+./testUCP.test
+./testMuxALUB.test
+./testCPUCOP.test
+./testBUSCOP.test
