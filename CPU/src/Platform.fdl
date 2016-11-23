@@ -279,7 +279,6 @@ fsm slavebusinterface_cntrl(slavebusinterface){
        else (nothing) -> s2;
    @s3 if (bus_waitr == 1) then (ackInternalData) -> s0;
        else (internalData) -> s3;
-   
 }
 
 dp slavebusinterface2 : slavebusinterface
@@ -500,7 +499,7 @@ dp bus_toplevel(
               ID_DataMem = 0x2;
               ID_Output = 0x3;
               //ID 4 is for the cache!
-              ID_COP = 0x5;
+              ID_COP = 0x6;
               $display($dec, "COP datain = ", COP_datain, ", COP dataout = ", COP_dataout, ", dataoutCOP = ", dataoutCOP, ", COP_datainrdy = ", COP_datainrdy);              
               $display($dec, "DataMem datain = ", DM_datain, ", DataMem dataout = ", DM_dataout, ", dataoutDataMem = ", dataoutDataMem, ", DM_datainrdy = ", DM_datainrdy);
            }
@@ -804,5 +803,4 @@ system CPUsystem{
    Output(OPDataout,OPCmdout,OPDataoutrdy,OPDatain,OPDatainrdy,OPStall,FilterOut);   
    mwiFilterBus(COPDataout, COPDataoutrdy, COPDatain,COPDatainrdy, COPStall);//COP
 
-   //Old arguments: (COPDataout,COPCmdout,COPDataoutrdy,COPDatain,COPDatainrdy,COPStall); // Data Memory Unit
 }

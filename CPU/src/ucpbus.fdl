@@ -40,7 +40,8 @@ dp mwiFilterBus(	 in datain : tc(32);
 		readCircularArray = 0;
 		indexPP = arrayIndex;
 		dataoutrdy = 0;
-		dataout = 0;
+		dataoutReg = 0;
+		dataout = dataoutReg;
 		stallReg = stall;
 	}
 	sfg addSumShift{
