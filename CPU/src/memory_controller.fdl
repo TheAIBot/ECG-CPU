@@ -212,10 +212,6 @@ dp memoryController(in target : ns(4);
 	sig useCache : ns(1);
 	sig useMwi : ns(1);
 
-	sig useBus : ns(1);
-	sig useCache : ns(1);
-	sig useMwi : ns(1);
-
 	sig allowEnablingATarget : ns(1);
 
 	sig internBusCmd : tc(32);
@@ -233,7 +229,7 @@ dp memoryController(in target : ns(4);
 
 	always
 	{
-		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | target == 0b0110);
+		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | (target == 0b0110);
 		isTargetCache =     (target == 0b0100);
 		isTargetMwiFilter = (target == 0b0101);
 
