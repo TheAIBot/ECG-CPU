@@ -227,9 +227,9 @@ dp memoryController(in target : ns(4);
 
 	always
 	{
-		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | (target == 0b0101);//(*)
+		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | target == 0b0110);//(*)
 		isTargetCache =     (target == 0b0100);
-		isTargetMwiFilter = (target == 0b0110); //(*)Temp set to 6 instead of 5
+		isTargetMwiFilter = (target == 0b0101); //(*)Temp set to 6 instead of 5
 
 		busReceivedValue =   (isTargetBus 		& busValueArrived);
 		cacheReceivedValue = (isTargetCache 	& cacheValueArrived);
