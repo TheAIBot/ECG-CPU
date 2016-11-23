@@ -1,0 +1,8 @@
+Cycle:0. Testing decoder for the CPU. op = 000, pcJMP = 0 ALUInstruction = 00, useIntermediate = 0, storeALU = 1 useMem = 0 RW = 0
+Cycle:1. Testing decoder for the CPU. op = 001, pcJMP = 0 ALUInstruction = 11, useIntermediate = 0, storeALU = 1 useMem = 0 RW = 0
+Cycle:2. Testing decoder for the CPU. op = 010, pcJMP = 0 ALUInstruction = 01, useIntermediate = 0, storeALU = 1 useMem = 0 RW = 0
+Cycle:3. Testing decoder for the CPU. op = 011, pcJMP = 0 ALUInstruction = 00, useIntermediate = 1, storeALU = 1 useMem = 0 RW = 0
+Cycle:4. Testing decoder for the CPU. op = 100, pcJMP = 0 ALUInstruction = 10, useIntermediate = 1, storeALU = 1 useMem = 0 RW = 0
+Cycle:5. Testing decoder for the CPU. op = 101, pcJMP = 0 ALUInstruction = 00, useIntermediate = 0, storeALU = 0 useMem = 1 RW = 1
+Cycle:6. Testing decoder for the CPU. op = 110, pcJMP = 0 ALUInstruction = 00, useIntermediate = 0, storeALU = 1 useMem = 1 RW = 0
+Cycle:7. Testing decoder for the CPU. op = 111, pcJMP = 1 ALUInstruction = 00, useIntermediate = 0, storeALU = 0 useMem = 0 RW = 0

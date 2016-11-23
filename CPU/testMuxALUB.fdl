@@ -19,7 +19,7 @@ fsm mux_testbench(testMux){
     @sUseBGiven (test_UseBGiven) -> sUseIntermediate;
 }
 
-//system myFirstSystem {
-//	mux_ALU_b(b, intermediate, useIntermediate, correctB);
-//	testMux(b, intermediate, useIntermediate, correctB);
-//}
+system myFirstSystem {
+	mux_ALU_b(b, intermediate, useIntermediate, correctB);
+	testMux(b, intermediate, useIntermediate, correctB);
+}
