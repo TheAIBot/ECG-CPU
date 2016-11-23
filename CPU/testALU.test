@@ -1,0 +1,10 @@
+#!/bin/bash
+cpp -P testALU.fdl | fdlsim 4 >> result.txt
+java -jar testVerifier.jar testALU.expected result.txt
+
+
+if [ $? ]; then
+    echo "Success testALU"
+else
+	echo "Failed testALU"
+fi

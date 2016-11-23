@@ -1,0 +1,4 @@
+Cycle:0Testing advanced ALU for the CPU. a = 535, b = 35 select = 0, ALUout = 570
+Cycle:1Testing advanced ALU for the CPU. a = 535, b = 35 select = 1, ALUout = 500
+Cycle:2Testing advanced ALU for the CPU. a = 535, b = 3 select = 2, ALUout = 66
+Cycle:3Testing advanced ALU for the CPU. a = 107, b = 15 select = 3, ALUout = 11
