@@ -1,8 +1,8 @@
 ADDI R1 R0 111
-ADDI R2 R0 12345s
-LOAD R3 R1 MEM //Test what happens
+ADDI R2 R0 12345
+LOAD R3 R1 MEM //Test what happens in a normal situation
 ADDI R5 R0 1
-COP R1 R2
+LOAD R1 R2 COP_BUS //Runs the COP on the bus
 ADDI R5 R0 1
 ADDI R5 R5 1
 ADDI R5 R5 1

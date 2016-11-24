@@ -14,6 +14,12 @@ dp mwiFilterBus(	 in datain : tc(32);
 			 out dataoutrdy : ns(1);
 			 in stall : ns(1))
 {
+
+
+
+
+
+
 	reg difference : tc(32);
 	reg formerValue : tc(32);
 	reg arrayIndex : ns(5);
@@ -27,14 +33,8 @@ dp mwiFilterBus(	 in datain : tc(32);
 	sig readCircularArray : ns(1);
 	sig updatedSum : tc(32);
 	use circularArrayBus(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
-	//always{
-		//$display("");//newline
-		//$display($dec, "Cycle = ", $cycle);
-		//$display($dec, "    In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
-		//$display($dec, "    Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
-	//}
 	sfg stall{ //Though it stalls, it calculates the values for cycle 1.
-		hasDataIn = datainrdy;
+		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
 		difference = datain - formerValue;
 		writeCircularArray = 1;
 		readCircularArray = 0;
@@ -56,21 +56,20 @@ dp mwiFilterBus(	 in datain : tc(32);
 		readCircularArray = 1;
 		stallReg = stall;
 	}
-	sfg setLoadedValue{
+	sfg getRedyToNextValue{
 		formerValue = circArrayOut;
 		writeCircularArray = 0;
 		readCircularArray = 0;
 		indexPP = arrayIndex;
 		hasDataIn = 0;		
-		dataoutrdy = stallReg == 0;
-		dataout = dataoutReg;
+		dataoutrdy = 0;
+		dataout = dataoutReg; //(*)Is fixed but needs to be done two times in a row.
+		dataoutReg = 0; //set to zero as the datapoint should have been registrated by the bus, when this cycle ends.
 		stallReg = stall;
 	}
 	sfg awaithandshake{
-		dataoutrdy = stallReg == 0;
+		dataoutrdy = (stall == 0);
 		dataout = dataoutReg;
-		hasDataIn = hasDataIn;
-		difference = difference;
 		stallReg = stall;
 
 		//circularArrayBus needs to get it's inputs
@@ -94,7 +93,7 @@ fsm ucpBus(mwiFilterBus){
 	@sStall  if(hasDataIn)     then 		(addSumShift)  		-> sCycle2;
 		 else				    	(stall)        		-> sStall;
 	@sCycle2 if(stallReg == 1) then			(awaithandshake)	-> sCycle2;					
-		 else 					(setLoadedValue)  	-> sStall; //And ready for the next round.
+		 else 					(getRedyToNextValue) 	-> sStall; //And ready for the next round.
 }
 
 
