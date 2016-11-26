@@ -16,7 +16,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 {
 	//Input registers
 	reg hasDataIn : ns (1); //Corresponds to datainrdyReg
-	reg dataoutReg : tc(32); //Added(*)
+	reg dataoutReg : tc(32); //Added(*). Explain functionality in repport.
 	reg stallReg : ns(1);
 	//reg dataoutrdyReg : ns(1); Not needed as stall==0 and stallReg==0 takes almost no time, which is what sets dataoutrdy
 
@@ -35,48 +35,65 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 
 	sfg stall{ //Though it stalls, it calculates the values for cycle 1.
-		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
+		//Functionality: Calculates the difference to be added to the sum.
 		difference = datain - formerValue;
-		writeCircularArray = 1;
-		readCircularArray = 0;
-		indexPP = arrayIndex;
+		
+		//For the final state machine. Shifts to next state if datainrdy=1.
+		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
+		stallReg = stall;
+		
+		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
 		dataoutReg = 0;
-		dataout = dataoutReg;
-		stallReg = stall;
+		dataout = dataoutReg; //(*) Explain
+		
+		//Writes the new data point to the memory/circular array.
+		indexPP = arrayIndex;
+		writeCircularArray = 1;
+		readCircularArray = 0;
 	}
 	sfg addSumShift{
+		//Updates the sum
 		updatedSum = sum + difference;
+		sum = updatedSum; 
+		//Bitshifts the updated sum, and send it out as a result.
 		dataout = (tc(32))updatedSum[5:31];
-		dataoutReg = (tc(32))updatedSum[5:31];
-		sum = updatedSum;
-		dataoutrdy = stallReg == 0;
+		//The result needs to be sent out more than one cycle.
+		dataoutReg = (tc(32))updatedSum[5:31]; 
+		
+		stallReg = stall;
+		//Shouldt give the signal of being finished before the bus marks the stalling to be done.
+		dataoutrdy = stallReg == 0; 
+		
+		//Increments the index for the next element in the circular array/memory. Automaticly bitshifted as the size is 5 bits.
 		indexPP = arrayIndex + 1;
-		arrayIndex = indexPP;		
+		arrayIndex = indexPP;	
+		//Begins loading the next element to be inserted in formerValue, as it takes 2 cycles.	
 		writeCircularArray = 0;
 		readCircularArray = 1;
-		stallReg = stall;
 	}
-	sfg getRedyToNextValue{
+	sfg awaithandshake{
+		//Does as it says on the tin.
+		dataoutrdy = (stall == 0); //If it gets stall==0, it is ready for the output, and thus it gives
+		dataout = dataoutReg;
+		stallReg = stall;
+
+		//circularArrayBus needs to get it's inputs, for gezel not to crash. Doesen't fo anything.
+		indexPP = arrayIndex;
+		writeCircularArray = 0;
+		readCircularArray = 0;
+	}
+	sfg getRedyForNextInput{
+		//Updates formerValue with the element in the circular array, and (thus) gets redy to get a new input.
 		formerValue = circArrayOut;
 		writeCircularArray = 0;
 		readCircularArray = 0;
 		indexPP = arrayIndex;
-		hasDataIn = 0;		
+		hasDataIn = 0; //Might need to check this, setting it equal to ~datainrdy (*)		
 		dataoutrdy = 0;
 		dataout = dataoutReg; //(*)Is fixed but needs to be done two times in a row.
 		dataoutReg = 0; //set to zero as the datapoint should have been registrated by the bus, when this cycle ends.
 		stallReg = stall;
-	}
-	sfg awaithandshake{
-		dataoutrdy = (stall == 0);
-		dataout = dataoutReg;
-		stallReg = stall;
-
-		//circularArrayBus needs to get it's inputs
-		indexPP = arrayIndex;
-		writeCircularArray = 0;
-		readCircularArray = 0;
 	}
 
 	always
