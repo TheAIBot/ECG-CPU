@@ -43,7 +43,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
-		dataoutReg = 0;
+		dataoutReg = dataoutReg;
 		dataout = dataoutReg; //When going from awaithandshake, one needs to make sure to give the result out twice, per. the construction of the bus.
 
 		//Gives the inputs to the circular array - nothing needs to be done as there are no inputs registrated as of yet.
