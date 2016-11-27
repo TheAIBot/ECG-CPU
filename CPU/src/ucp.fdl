@@ -32,7 +32,7 @@ dp mwiFilter	(in datain : tc(32);
 	
 	//Though it stalls, it calculates the values for cycle 1.
 	sfg stall{		
-		//Calculates the difference from the former value on the place in teh circular array, and the new input. 
+		//Calculates the difference from the former value on the place in the circular array, and the new input. 
 		difference = datain - formerValue; 
 
 		//Goes to the next cycle if datainrdy = 1 ((*) same as the other UCP versions)
@@ -75,6 +75,12 @@ dp mwiFilter	(in datain : tc(32);
 		//$display($dec, "Cycle = ", $cycle);
 		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
 		//$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
+
+		//For the illustration:
+		//$display($dec, "Cycle = ", $cycle);
+		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
+		//$display($dec, "hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex, ", formerValue = ",formerValue);
+		//$display($dec, "circArrayOut = ", circArrayOut, ", outPlus = ", sum + difference );
 	}
 }
 

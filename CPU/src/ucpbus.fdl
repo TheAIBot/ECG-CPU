@@ -62,8 +62,6 @@ dp mwiFilterBus(	 in datain : tc(32);
 		dataoutReg = (tc(32))updatedSum[5:31]; 
 		
 		stallReg = stall;
-		//Shouldt give the signal of being finished before the bus marks the stalling to be done.
-		dataoutrdy = stallReg == 0; 
 		
 		//Increments the index for the next element in the circular array/memory. Automaticly bitshifted as the size is 5 bits.
 		indexPP = arrayIndex + 1;
@@ -72,11 +70,14 @@ dp mwiFilterBus(	 in datain : tc(32);
 		writeCircularArray = 0;
 		readCircularArray = 1;
 	}
-	sfg awaithandshake{
-		//Does as it says on the tin.
+	sfg awaithandshake{//Does as it says on the tin.
+
 		dataoutrdy = (stall == 0); //If it gets stall==0, it is ready for the output, and thus it gives
 		dataout = dataoutReg;
 		stallReg = stall;
+
+		//Updates formerValue with the element in the circular array, and (thus) gets redy to get a new input.
+		formerValue = circArrayOut;
 
 		//circularArrayBus needs to get it's inputs, for gezel not to crash. Doesen't fo anything.
 		indexPP = arrayIndex;
@@ -84,8 +85,8 @@ dp mwiFilterBus(	 in datain : tc(32);
 		readCircularArray = 0;
 	}
 	sfg getRedyForNextInput{
-		//Updates formerValue with the element in the circular array, and (thus) gets redy to get a new input.
-		formerValue = circArrayOut;
+
+		//circularArrayBus needs to get it's inputs, for gezel not to crash. Doesen't fo anything.
 		writeCircularArray = 0;
 		readCircularArray = 0;
 		indexPP = arrayIndex;

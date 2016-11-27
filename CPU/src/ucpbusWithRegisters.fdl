@@ -48,10 +48,10 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 		//Gives the inputs to the circular array - nothing needs to be done as there are no inputs registrated as of yet.
 		indexPP = arrayIndex;
-		writeCircularArray = 1;
+		writeCircularArray = 0; //(*)Check here.
 		readCircularArray = 0;
 	}
-	sfg awaitNoStall{ //Does the calculation possible before it can give the results when the bus stop's givning the stall signal.
+	sfg awaitNoStall{ //Writes the new datapoint to memory, and calculates the differnce from the old one
 		//Functionality: Calculates the difference to be added to the sum.
 		difference = datainReg - formerValue;
 		
@@ -69,7 +69,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		writeCircularArray = 1;
 		readCircularArray = 0;
 	}
-	sfg addSumShift{
+	sfg addSumShift{  //Does the calculation possible before it can give the results when the bus stop's givning the stall signal.
 		//Updates the sum
 		updatedSum = sum + difference;
 		sum = updatedSum; 

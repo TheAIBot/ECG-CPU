@@ -133,11 +133,11 @@ dp databus(
 
         	//Displays for tests
 
-        	$display(""); //newline
-        	$display("Displays from databus");
-        	$display($dec,"Request from CPU = ", reqCPU, ", command from CPU = ", $bin, cmdCPU, $dec, ", data out from CPU = ", dataoutCPU, ", ack CPU = ", ackCPU);
-        	$display($dec, "dataRdyCPU = ", dataRdyCPU, ", datainCPU = ", datainCPU, ", waitCPU = ", waitCPU, ", dataRdyCOP = ", dataRdyCOP, ", dataRdyDataMem = ",  dataRdyDataMem, ", dataoutCop = ", dataoutCOP);
-        	$display(""); //newline
+        	//$display(""); //newline
+        	//$display("Displays from databus");
+        	//$display($dec,"Request from CPU = ", reqCPU, ", command from CPU = ", $bin, cmdCPU, $dec, ", data out from CPU = ", dataoutCPU, ", ack CPU = ", ackCPU);
+        	//$display($dec, "dataRdyCPU = ", dataRdyCPU, ", datainCPU = ", datainCPU, ", waitCPU = ", waitCPU, ", dataRdyCOP = ", dataRdyCOP, ", dataRdyDataMem = ",  dataRdyDataMem, ", dataoutCop = ", dataoutCOP);
+        	//$display(""); //newline
 
           ackCPU = 	(cmdCPU[28:31] == ID_DataMem & ackDataMem) 	|
           		   	(cmdCPU[28:31] == ID_Sensor & ackSensor) 	|
