@@ -40,7 +40,8 @@ dp mwiFilterBus(	 in datain : tc(32);
 		
 		//For the final state machine. Shifts to next state if datainrdy=1.
 		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
-		stallReg = stall;
+		stallReg = stall;		
+		
 		
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
@@ -61,7 +62,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		//The result needs to be sent out more than one cycle.
 		dataoutReg = (tc(32))updatedSum[5:31]; 
 		
-		stallReg = stall;
+		stallReg = 1; //Set to 1 as it is used to check if the result can be sent back, which requires stallReg=1 in the starting fase.
 		
 		//Increments the index for the next element in the circular array/memory. Automaticly bitshifted as the size is 5 bits.
 		indexPP = arrayIndex + 1;
