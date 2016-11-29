@@ -8,7 +8,6 @@
 #include "cache.fdl"
 #include "memory_controller.fdl"
 #include "ucp.fdl"
-//#include "ucpbus.fdl"
 #include "ucpbusWithRegisters.fdl" //(*) Test. See above.
 
 #include "cpu.fdl"
