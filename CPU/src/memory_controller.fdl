@@ -262,9 +262,6 @@ dp memoryController(in target : ns(4);
 					(cacheReceivedValue) ? cacheValue :
 										   mwiValue;
 		hasDataFromMemory = useMem & (busReceivedValue | cacheReceivedValue | mwiReceivedValue);
-
-
-
 	
 		//$display($dec, "memoryOut: ", memoryOut, " hasDataFromMemory: ", hasDataFromMemory, " stall: ", stall, " mode: ", mode, " shouldEnable: ", shouldEnable(mode));
 		//$display($dec, "BUS_dataout:   ", BUS_dataout, " BUS_dataoutrdy:   ", BUS_dataoutrdy, " reset: ", busReset, " BUS_datainrdy:   ", BUS_datainrdy, " BUS_enable:   ", busEnable);

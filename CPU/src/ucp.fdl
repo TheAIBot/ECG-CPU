@@ -8,49 +8,61 @@ ipblock circularArray(in address : ns(32);
 	ipparm "wl=32";
 }
 
-dp mwiFilter(in datain : tc(32);
-			 in datainrdy : ns(1);
-			 out dataout : tc(32);
-			 out dataoutrdy : ns(1))
+dp mwiFilter	(in datain : tc(32);
+		 in datainrdy : ns(1);
+		 out dataout : tc(32);
+		 out dataoutrdy : ns(1))
 {
-	reg difference : tc(32);
-	reg formerValue : tc(32);
-	reg arrayIndex : ns(5);
-	reg sum : tc(32);
+	//The registers used in calculations:
+	reg difference : tc(32); //Reg
+	reg formerValue : tc(32); //R6 
+	reg arrayIndex : ns(5); //R1
+	reg sum : tc(32); //R3
+	
+	reg hasDataIn : ns (1); //Used by the final state machine	
+
+	sig updatedSum : tc(32); //As the name says
+	
+	//For the connection to the memory block/circular array
 	sig circArrayOut : tc(32);
 	sig indexPP : ns(5);	
-	reg hasDataIn : ns (1);
 	sig writeCircularArray : ns(1);
 	sig readCircularArray : ns(1);
-	sig updatedSum : tc(32);
 	use circularArray(indexPP,writeCircularArray,readCircularArray, datain, circArrayOut);
-	//always{
-		//$display("");//newline
-		//$display($dec, "Cycle = ", $cycle);
-		//$display($dec, "    In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
-		//$display($dec, "    Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
-	//}
-	sfg stall{ //Though it stalls, it calculates the values for cycle 1.
-		hasDataIn = datainrdy;
-		difference = datain - formerValue;
+	
+	//Though it stalls, it calculates the values for cycle 1.
+	sfg stall{		
+		//Calculates the difference from the former value on the place in the circular array, and the new input. 
+		difference = datain - formerValue; 
+
+		//Goes to the next cycle if datainrdy = 1 ((*) same as the other UCP versions)
+		hasDataIn = datainrdy; 
+		
+		//Writes datain to the circular array at indexPP=arrayIndex.
 		writeCircularArray = 1;
 		readCircularArray = 0;
 		indexPP = arrayIndex;
+
+		//No output is ready.
 		dataoutrdy = 0;
 		dataout = 0;
 	}
-	sfg addSumShift{
-		updatedSum = sum + difference;
-		dataout = (tc(32))updatedSum[5:31];
+	sfg addSumShift{ //Calculates the result of the UCP and gives it as an output.
+		updatedSum = sum + difference; //Says it on the tin
 		sum = updatedSum;
+
+		//Bitshifts the updated sum by 5, and gives it as an output.
+		dataout = (tc(32))updatedSum[5:31]; 
 		dataoutrdy = 1;
+
+		//Reads the next element in the circular array, and updates the current index.
 		indexPP = arrayIndex + 1;
 		arrayIndex = indexPP;		
 		writeCircularArray = 0;
 		readCircularArray = 1;
 	}
-	sfg setLoadedValue{
-		formerValue = circArrayOut;
+	sfg setLoadedValue{ //Gets ready for a new input.
+		formerValue = circArrayOut; //The output with the delay of one cycle, is now ready.
 		writeCircularArray = 0;
 		readCircularArray = 0;
 		indexPP = arrayIndex;
@@ -58,12 +70,17 @@ dp mwiFilter(in datain : tc(32);
 		dataoutrdy = 0;
 		dataout = 0;
 	}
-
 	always
 	{	
 		//$display($dec, "Cycle = ", $cycle);
 		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
 		//$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
+
+		//For the illustration:
+		//$display($dec, "Cycle = ", $cycle);
+		//$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy);
+		//$display($dec, "hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex, ", formerValue = ",formerValue);
+		//$display($dec, "circArrayOut = ", circArrayOut, ", outPlus = ", sum + difference );
 	}
 }
 
@@ -71,9 +88,9 @@ fsm ucp(mwiFilter){
 	initial sStall;
 	state sCycle2;
 	
-	@sStall  if(hasDataIn) then (addSumShift) -> sCycle2;
-			 else				(stall)        -> sStall;
-	@sCycle2 					(setLoadedValue)  -> sStall; //And ready for the next round.
+	@sStall  	if(hasDataIn) 	then		(addSumShift) 		-> sCycle2;
+		 	else				(stall)        		-> sStall;
+	@sCycle2 					(setLoadedValue)  	-> sStall; //And ready for the next round of inputs.
 }
 
 
