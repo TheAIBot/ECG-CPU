@@ -1,59 +1,65 @@
 --alu
-equal2 3
+mux2 3
 add32 1
 sub32 1
-sri32 1
+rshift32 1
 and32 1
-ternary 3
-
---buscmd
-concat32 1
 
 --cache
 ram32 32
-
---decoder
-lookup7 1
-
---memorycontroller
-ternary 2
-equal4 1
-and1 5
-not1 3
-or1 1
 reg1 1
 
---memoryfetch
-ram32 64
-ternary 2
-add32 1
-convert32 1
-reg32 1
+--cpu
 
---muxalu
-ternary 1
+
+--decoder
+loopup7 1
+
+--rsflipflop_size_1 x 4
+reg1 4
+and1 24
+not1 16
+mux1 24
+
+--rsflipflop_size_32 x 4
+reg32 4
+and1 24
+not1 16
+mux32 24
+
+--busCMD
+concat 32 1
+
+--memory_controller
+lookup1 2
+equal4 6
+or1 7
+and1 16
+not1 2
+mux32 2
+
+--memory_fetch
+ram32 64
+reg32 1
+mux32 2
 convert32 1
+add32 1
+
+--mux_alu
+convert32 1
+mux32 1
 
 --register
-ternary 21
-equal3 21
 reg32 8
-and3 7
+mux32 21
+equal3 21
+and1 7
 
---registerstore
-ternary 1
+--registerStore
+mux32 1
 
---shouldstall
-and 1 2
-not1 1
-or1 1
-
-
-
-
-
-
-
-
+--stall
+and1 3
+not1 2
 
 
