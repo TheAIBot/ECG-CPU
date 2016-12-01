@@ -60,7 +60,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
-		dataoutReg = 0;
+		dataoutReg = dataoutReg;
 		dataout = dataoutReg;
 		
 		//Writes the new data point to the memory/circular array.
