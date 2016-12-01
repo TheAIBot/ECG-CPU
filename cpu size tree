@@ -1,0 +1,95 @@
+--rsflipflop_size_1 17
+reg1 1
+and1 6
+not1 4
+mux1 6
+
+--rsflipflop_size_32 234
+reg32 1
+and1 6
+not1 4
+mux32 6
+
+--CPU 8410
+    --ALU 134
+    mux2 3
+    add32 1
+    sub32 1
+    rshift32 1
+    and32 1
+
+    --cache 1025
+    ram32 32
+    reg1 1
+
+    --decoder 7
+    loopup7 1
+
+    --memoryController 1385
+    lookup1 2
+    equal4 6
+    or1 7
+    and1 16
+    not1 2
+    mux32 2
+        
+        --busCMD 32
+        concat 32 1
+
+        --busBlock 736
+            --rsflipflop_size_1 x 2
+            --rsflipflop_size_32 x 3
+        --cacheBlock 251
+            --rsflipflop_size_1
+            --rsflipflop_size_32
+        --mwiFilterBlock 251
+            --rsflipflop_size_1
+            --rsflipflop_size_32
+
+    --PC 160
+    reg32 1
+    mux32 2
+    convert32 1
+    add32 1
+
+    --fetch 2080
+    ram32 64
+    reg32 1
+
+    --mux_ALU_b 64
+    convert32 1
+    mux32 1
+
+    --registers 998
+    reg32 8
+    mux32 21
+    equal3 21
+    and1 7
+
+    --registerStore 32
+    mux32 1
+
+    --shouldStall 5
+    and1 3
+    not1 2
+
+    --mwiFilter 1227
+    ram32 32
+    reg32 3
+    reg5 1
+    reg1 1
+    sub32 1
+    add32 1
+    convert32 1
+    add5 1
+
+    --mwiFilterBus 1293
+    ram32 32
+    reg32 5
+    reg1 2
+    reg5 1
+    sub32 1
+    add32 1
+    convert32 1
+    add5 1
+    equal1 1
