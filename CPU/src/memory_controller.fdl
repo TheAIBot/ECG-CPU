@@ -212,6 +212,8 @@ dp memoryController(in target : ns(4);
 	sig useCache : ns(1);
 	sig useMwi : ns(1);
 
+	sig allowEnablingATarget : ns(1);
+
 	sig internBusCmd : tc(32);
 
 	use busBlock(busReset, busEnable, BUS_dataoutrdy, BUS_dataout, a, internBusCmd, busValueArrived, busValue, BUS_datainrdy, BUS_datain, BUS_CMD);
@@ -227,38 +229,38 @@ dp memoryController(in target : ns(4);
 
 	always
 	{
-		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | (target == 0b0110);//(*)
+		isTargetBus =       (target == 0b0001) | (target == 0b0010) | (target == 0b0011) | (target == 0b0110);
 		isTargetCache =     (target == 0b0100);
-		isTargetMwiFilter = (target == 0b0101); //(*)Temp set to 6 instead of 5
+		isTargetMwiFilter = (target == 0b0101);
 
-		busReceivedValue =   (isTargetBus 		& busValueArrived);
-		cacheReceivedValue = (isTargetCache 	& cacheValueArrived);
-		mwiReceivedValue =   (isTargetMwiFilter & mwiValueArrived);
+		busReceivedValue =   isTargetBus 		& busValueArrived;
+		cacheReceivedValue = isTargetCache 		& cacheValueArrived;
+		mwiReceivedValue =   isTargetMwiFilter 	& mwiValueArrived;
 
 		stallMode = shouldModeStall(mode);
 
 		stall = useMem & stallMode & ~(busReceivedValue | cacheReceivedValue | mwiReceivedValue);
 
-		busReset =   useMem & stallMode   & isTargetBus;
-		cacheReset = useMem & stallMode   & isTargetCache;
-		mwiReset =   useMem & stallMode   & isTargetMwiFilter;
+		useBus   = useMem & isTargetBus;
+		useCache = useMem & isTargetCache;
+		useMwi   = useMem & isTargetMwiFilter;
 
-		useBus =   useMem & shouldEnable(mode) & isTargetBus;
-		useCache = useMem & 			 isTargetCache;
-		useMwi =   useMem & shouldEnable(mode) & isTargetMwiFilter;
+		busReset   = useBus   & stallMode;
+		cacheReset = useCache & stallMode;
+		mwiReset   = useMwi   & stallMode;
 
-		busEnable = useBus;
-
+		allowEnablingATarget = shouldEnable(mode);
+		busEnable   = useBus  & allowEnablingATarget;
 		cacheEnable = useCache;
+		mwiEnable   = useMwi  & allowEnablingATarget;
+
 		cacheR = (useCache & ~RW);
 		cacheW = (useCache &  RW);
 		cacheAddress = (RW) ? b : a; 
 
-		mwiEnable = useMwi;
-
 		memoryOut = (busReceivedValue)   ? busValue : 
 					(cacheReceivedValue) ? cacheValue :
-										 mwiValue;
+										   mwiValue;
 		hasDataFromMemory = useMem & (busReceivedValue | cacheReceivedValue | mwiReceivedValue);
 	
 		//$display($dec, "memoryOut: ", memoryOut, " hasDataFromMemory: ", hasDataFromMemory, " stall: ", stall, " mode: ", mode, " shouldEnable: ", shouldEnable(mode));

@@ -1,0 +1,5 @@
+ram: set size 32
+ram: set wl 32
+For dataset1, one gets that: dataout = 0, where the expected value was = x, giving: 0
+For dataset1, one gets that: dataout = 1, where the expected value was = x, giving: 0
+For dataset1, one gets that: dataout = 2, where the expected value was = x, giving: 1
