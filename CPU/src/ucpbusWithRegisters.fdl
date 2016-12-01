@@ -102,10 +102,14 @@ dp mwiFilterBus(	 in datain : tc(32);
 		indexPP = arrayIndex;	
 	}
 	always
-	{			
+	{		
+		$display("");	
 		$display($dec, "Cycle = ", $cycle);
-		$display($dec, "In UCP, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy, ", stall = ", stall);
-		$display($dec, "Also in UCP, hasDataIn = ", hasDataIn, ", difference = ", difference, ", sum = ", sum, ", arrayindex = ", arrayIndex);
+		$display($dec, "In UCP, input/outputs, datain = ", datain, ", datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy, ", stall = ", stall);
+		$display($dec, "In UCP, input/output registers, hasDataIn = ", hasDataIn, ", datainReg = ", datainReg, ", dataoutReg = ", dataoutReg, ", stallReg = ", stallReg);
+		$display($dec, "Also in UCP, difference = ", difference, ", formerValue = ", formerValue, ", arrayIndex = ", arrayIndex, ", sum = ", sum, ", circArrayOut = ",circArrayOut, ", indexPP = ", indexPP);
+		$display("");
+
 	}
 }
 
