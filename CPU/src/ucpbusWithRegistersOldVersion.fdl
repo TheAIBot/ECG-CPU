@@ -34,29 +34,30 @@ dp mwiFilterBus(	 in datain : tc(32);
 	sig updatedSum : tc(32);
 	use circularArrayBus(indexPP,writeCircularArray,readCircularArray, datainReg, circArrayOut);
 
-	sfg stall{//Awaits inputs.		
+	sfg stall{//Awaits inputs.
+		
 		//Gets the inputs.
 		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
 		datainReg = datain;
 		stallReg = stall;
-		
+
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
 		dataoutReg = dataoutReg;
-		dataout = dataoutReg; //(*)When going from awaithandshake, one needs to make sure to give the result out twice, per the construction of the bus.
-		
+		dataout = dataoutReg; //When going from awaithandshake, one needs to make sure to give the result out twice, per. the construction of the bus.
+
 		//Gives the inputs to the circular array - nothing needs to be done as there are no inputs registrated as of yet.
 		indexPP = arrayIndex;
-		writeCircularArray = 0;
+		writeCircularArray = 0; //(*)Check here.
 		readCircularArray = 0;
 	}
-	sfg awaitNoStall{ //Writes the new datapoint to memory, and calculates the difference from the old one
+	sfg awaitNoStall{ //Writes the new datapoint to memory, and calculates the differnce from the old one
 		//Functionality: Calculates the difference to be added to the sum.
 		difference = datainReg - formerValue;
 		
 		//For the final state machine. stall is used in the comming cycles/states.
-		hasDataIn = datainrdy;
-		stallReg = stall;
+		hasDataIn = datainrdy; 
+		stallReg = stall; 
 
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
@@ -76,7 +77,6 @@ dp mwiFilterBus(	 in datain : tc(32);
 		dataoutReg = (tc(32))updatedSum[5:31];
 		dataout = dataoutReg; //Sends the result out: needs one cycle to update.
 		
-		hasDataIn = datainrdy; 
 		stallReg = stall;
 		dataoutrdy = 0; //This sfg must have been run, before the sum is updated, and thus it can give it to the bus. Hence dataoutrdy=0.
 		
@@ -86,20 +86,25 @@ dp mwiFilterBus(	 in datain : tc(32);
 		//Begins loading the next element to be inserted in formerValue, as this takes 2 cycles.	
 		writeCircularArray = 0;
 		readCircularArray = 1;
-	} sfg awaithandshake{ //Awaits the handshake.	
-
-		//Continues setting the state shift variables. (*)
-		hasDataIn = datainrdy;		
+	}
+	sfg saveValuesAndAwait{ //safes the result and readys for the handshake. (*) Check if neccesary.
+		
+	}
+	sfg awaithandshake{ //Awaits the handshake.		
 		stallReg = stall;
-		dataoutrdy = (stallReg == 0); //stallReg==0 means that the output can be delivered.
+		dataoutrdy = (stallReg == 0);
 		dataout = dataoutReg;
 
-		formerValue = circArrayOut; //Sets the former value. Can continue to set this as readCircularArray here is =1
+		//The loaded value is inserted into the register.
+		formerValue = circArrayOut; //(*) Obs. only works if circArrayOut stays contsant. Check.
 
 		//circularArrayBus needs to get it's inputs
 		writeCircularArray = 0;
-		readCircularArray = 1; //Forklar hvorfor denne (*)
-		indexPP = arrayIndex;	
+		readCircularArray = 0;
+		indexPP = arrayIndex;
+		
+		//Readys (*)
+		hasDataIn = 0;		
 	}
 	always
 	{			
