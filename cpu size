@@ -62,23 +62,68 @@ mux32 1
 and1 3
 not1 2
 
---ucp
-ram32 32
-reg32 3
-reg5 1
-reg1 1
-sub32 1
+--alu
+mux2 3
 add32 1
-convert32 1
-add5 1
+sub32 1
+rshift32 1
+and32 1
 
---ucpbusWithRegisters
+--cache
 ram32 32
-reg32 5
-reg1 2
-reg5 1
-sub32 1
-add32 1
+reg1 1
+
+--cpu
+
+
+--decoder
+loopup7 1
+
+--rsflipflop_size_1 x 4
+reg1 4
+and1 24
+not1 16
+mux1 24
+
+--rsflipflop_size_32 x 4
+reg32 4
+and1 24
+not1 16
+mux32 24
+
+--busCMD
+concat 32 1
+
+--memory_controller
+lookup1 2
+equal4 6
+or1 7
+and1 16
+not1 2
+mux32 2
+
+--memory_fetch
+ram32 64
+reg32 1
+mux32 2
 convert32 1
-add5 1
-equal1 1
+add32 1
+
+--mux_alu
+convert32 1
+mux32 1
+
+--register
+reg32 8
+mux32 21
+equal3 21
+and1 7
+
+--registerStore
+mux32 1
+
+--stall
+and1 3
+not1 2
+
+
