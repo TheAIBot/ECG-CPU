@@ -40,8 +40,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		
 		//For the final state machine. Shifts to next state if datainrdy=1.
 		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
-		stallReg = stall;		
-		
+		stallReg = stall;				
 		
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
@@ -49,7 +48,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		dataout = dataoutReg; //(*) Explain
 		
 		//Writes the new data point to the memory/circular array.
-		indexPP = arrayIndex;
+		indexPP = arrayIndex + 1;
 		writeCircularArray = 1;
 		readCircularArray = 0;
 	}
@@ -81,7 +80,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		formerValue = circArrayOut;
 
 		//circularArrayBus needs to get it's inputs, for gezel not to crash. Doesen't fo anything.
-		indexPP = arrayIndex;
+		indexPP = arrayIndex + 1;
 		writeCircularArray = 0;
 		readCircularArray = 0;
 	}
