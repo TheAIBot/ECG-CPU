@@ -60,7 +60,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
-		dataoutReg = 0;
+		dataoutReg = dataoutReg;
 		dataout = dataoutReg;
 		
 		//Writes the new data point to the memory/circular array.
@@ -80,6 +80,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		stallReg = stall;
 		dataoutrdy = 0; //This sfg must have been run, before the sum is updated, and thus it can give it to the bus. Hence dataoutrdy=0.
 		
+		//(*) Setting former value - see diagram
 		//Increments the index for the next element in the circular array/memory. Automaticly bitshifted as the size is 5 bits.
 		indexPP = arrayIndex + 1;
 		arrayIndex = indexPP;	
