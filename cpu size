@@ -62,4 +62,23 @@ mux32 1
 and1 3
 not1 2
 
+--ucp
+ram32 32
+reg32 3
+reg5 1
+reg1 1
+sub32 1
+add32 1
+convert32 1
+add5 1
 
+--ucpbusWithRegisters
+ram32 32
+reg32 5
+reg1 2
+reg5 1
+sub32 1
+add32 1
+convert32 1
+add5 1
+equal1 1
