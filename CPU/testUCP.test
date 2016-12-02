@@ -1,6 +1,6 @@
 #!/bin/bash
 name="testUCP"
-cpp -P $name".fdl" | fdlsim 8 > result.txt
+cpp -P $name".fdl" | fdlsim 105 > result.txt
 java -jar testVerifier.jar $name".expected" result.txt
 if [ $? = "0" ]; then
     echo "Success $name"

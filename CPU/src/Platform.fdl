@@ -500,8 +500,8 @@ dp bus_toplevel(
               ID_Output = 0x3;
               //ID 4 is for the cache!
               ID_COP = 0x6;
-              $display($dec, "COP datain = ", COP_datain, ", COP dataout = ", COP_dataout, ", dataoutCOP = ", dataoutCOP, ", COP_datainrdy = ", COP_datainrdy);              
-              $display($dec, "DataMem datain = ", DM_datain, ", DataMem dataout = ", DM_dataout, ", dataoutDataMem = ", dataoutDataMem, ", DM_datainrdy = ", DM_datainrdy);
+              //$display($dec, "COP datain = ", COP_datain, ", COP dataout = ", COP_dataout, ", dataoutCOP = ", dataoutCOP, ", COP_datainrdy = ", COP_datainrdy);              
+              //$display($dec, "DataMem datain = ", DM_datain, ", DataMem dataout = ", DM_dataout, ", dataoutDataMem = ", dataoutDataMem, ", DM_datainrdy = ", DM_datainrdy);
            }
 }
 
@@ -509,18 +509,6 @@ dp bus_toplevel(
 // Auxiliary units
 ////////////////////////////
 ipblock datamem(in address : ns(14);
-          in wr,rd   : ns(1);
-          in idata   : ns(32);
-          out odata : ns(32)){
-
-  iptype "ram";
-  ipparm "size=11000";
-  ipparm "wl=32";
-  ipparm "file=datamemory.txt"; // initializes content. File syntax needs to be "addr data "* (the last space can also be a linebreak. NB! Should the students do a manual loading of the RAM to simulate a "real" system or is it ok if they just use this parameter?
-  //ipparm "file=sddb48hex2.ecg"; 
-}
-
-ipblock datamemCOP(in address : ns(14);
           in wr,rd   : ns(1);
           in idata   : ns(32);
           out odata : ns(32)){
@@ -568,10 +556,10 @@ dp DataMem(
        address = (cmdr[27] == 0) ? datainr : 0b00000 # cmdr[0:26]; // if Store Word instruction, use cmd[0:26] as address. If Load Word instruction use datain as address
        idata = (cmdr[27] == 0) ? 0 : datainr; // if store word use datain as data to be stored, if load word, just set idata to 0
        //$display($dec, "Cycle: ", $cycle);
-   	   $display($dec, "Datamem:");   	   
+   	   //$display($dec, "Datamem:");   	   
    	   //$display($dec, "  address: ", address, " r: ", rd, " w: ", wr, " idata: ", idata);   	   
-   	   $display($dec, "datain = ", datain, ", $bin , cmd = ", cmd, ", $dec, datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy, ", stall = ", stall );
-   	   $display("");
+   	   //$display($dec, "datain = ", datain, ", $bin , cmd = ", cmd, ", $dec, datainrdy = ", datainrdy, ", dataout = ", dataout, ", dataoutrdy = ", dataoutrdy, ", stall = ", stall );
+   	   //$display("");
    }
    
    sfg captureData{

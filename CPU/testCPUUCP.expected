@@ -1,3 +1,5 @@
+ram: set size 32
+ram: set wl 32
 ram: set size 64
 ram: set wl 32
 ram: set size 32

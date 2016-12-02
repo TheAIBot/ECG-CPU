@@ -1,8 +1,8 @@
 #!/bin/bash
-name="testBUSCOP"
+name="testBUSUCP"
 (cd ../UCI_programs; ./compile.sh mwi_bus_ucp.uci program.asm)
-(cd ..; cpp -P "CPU/src/Platform.fdl" | fdlsim 2513 > CPU/result.txt)
-java -jar testVerifier.jar "testCPUCOP.expected" result.txt
+(cd ..; cpp -P "CPU/src/Platform.fdl" | fdlsim 5020 > CPU/result.txt)
+java -jar testVerifier.jar $name".expected" result.txt
 if [ $? = "0" ]; then
     echo "Success $name"
 else

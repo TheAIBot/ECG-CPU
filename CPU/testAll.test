@@ -3,5 +3,5 @@
 ./testDecoder.test
 ./testUCP.test
 ./testMuxALUB.test
-./testCPUCOP.test
-./testBUSCOP.test
+./testCPUUCP.test
+./testBUSUCP.test
