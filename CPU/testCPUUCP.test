@@ -1,7 +1,7 @@
 #!/bin/bash
 name="testCPUUCP"
 (cd ../UCI_programs; ./compile.sh mwi_cpu_ucp.uci program.asm)
-(cd ..; cpp -P "CPU/src/Platform.fdl" | fdlsim 2513 > CPU/result.txt)
+(cd ..; cpp -P "CPU/src/Platform.fdl" | fdlsim 2512 > CPU/result.txt)
 java -jar testVerifier.jar $name".expected" result.txt
 if [ $? = "0" ]; then
     echo "Success $name"
