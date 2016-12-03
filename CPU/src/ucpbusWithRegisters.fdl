@@ -17,7 +17,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 	//Input and output registers
 	reg datainReg : tc(32);
 	reg hasDataIn : ns (1); //Corresponds to datainrdyReg
-	reg dataoutReg : tc(32); //Added(*)
+	reg dataoutReg : tc(32);
 	reg stallReg : ns(1);
 	//reg dataoutrdyReg : ns(1); Not needed as stallReg==0 takes almost no time, which is what sets dataoutrdy
 
@@ -36,14 +36,14 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 	sfg stall{//Awaits inputs.		
 		//Gets the inputs.
-		hasDataIn = datainrdy; //(*) Check here - if datainrdy is on for a long time, will it not run more than one time in a row?
+		hasDataIn = datainrdy;
 		datainReg = datain;
 		stallReg = stall;
 		
 		//Doesen't give the signal of a datapoints processesing being finished.
 		dataoutrdy = 0;
 		dataoutReg = dataoutReg;
-		dataout = dataoutReg; //(*)When going from awaithandshake, one needs to make sure to give the result out twice, per the construction of the bus.
+		dataout = dataoutReg;
 		
 		//Gives the inputs to the circular array - nothing needs to be done as there are no inputs registrated as of yet.
 		indexPP = arrayIndex;
@@ -80,7 +80,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		stallReg = stall;
 		dataoutrdy = 0; //This sfg must have been run, before the sum is updated, and thus it can give it to the bus. Hence dataoutrdy=0.
 		
-		//(*) Setting former value - see diagram
+        formerValue = circArrayOut;
 		//Increments the index for the next element in the circular array/memory. Automaticly bitshifted as the size is 5 bits.
 		indexPP = arrayIndex + 1;
 		arrayIndex = indexPP;	
@@ -89,7 +89,7 @@ dp mwiFilterBus(	 in datain : tc(32);
 		readCircularArray = 1;
 	} sfg awaithandshake{ //Awaits the handshake.	
 
-		//Continues setting the state shift variables. (*)
+		//Continues setting the state shift variables.
 		hasDataIn = datainrdy;		
 		stallReg = stall;
 		dataoutrdy = (stallReg == 0); //stallReg==0 means that the output can be delivered.
@@ -99,7 +99,8 @@ dp mwiFilterBus(	 in datain : tc(32);
 
 		//circularArrayBus needs to get it's inputs
 		writeCircularArray = 0;
-		readCircularArray = 1; //Forklar hvorfor denne (*)
+        //Continiues to read from the memory so that formarValue is always correct no matter how long it stalls
+		readCircularArray = 1; 
 		indexPP = arrayIndex;	
 	}
 	always

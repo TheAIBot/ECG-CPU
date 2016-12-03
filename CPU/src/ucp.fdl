@@ -35,7 +35,7 @@ dp mwiFilter	(in datain : tc(32);
 		//Calculates the difference from the former value on the place in the circular array, and the new input. 
 		difference = datain - formerValue; 
 
-		//Goes to the next cycle if datainrdy = 1 ((*) same as the other UCP versions)
+		//Goes to the next cycle if datainrdy = 1
 		hasDataIn = datainrdy; 
 		
 		//Writes datain to the circular array at indexPP=arrayIndex.
