@@ -1,4 +1,4 @@
-dp rsflipflop_size_1(in set : ns(1);
+dp pec_size_1(in set : ns(1);
 			  		 in input : ns(1);
 					 in reset : ns(1);
 					 out output : ns(1))
@@ -17,7 +17,7 @@ dp rsflipflop_size_1(in set : ns(1);
 	}
 }
 
-dp rsflipflop_size_32(in set : ns(1);
+dp pec_size_32(in set : ns(1);
 			  		 in input : tc(32);
 					 in reset : ns(1);
 					 out output : tc(32))
@@ -37,19 +37,19 @@ dp rsflipflop_size_32(in set : ns(1);
 	}
 }
 
-//busBlock rsflipflops
-dp rsflipflop1_size_1 : rsflipflop_size_1
-dp rsflipflop1_size_32 : rsflipflop_size_32
-dp rsflipflop2_size_1 : rsflipflop_size_1
-dp rsflipflop2_size_32 : rsflipflop_size_32
+//busBlock pecs
+//dp pec1_size_1 : pec_size_1
+dp pec1_size_32  : pec_size_32
+dp pec2_size_1   : pec_size_1
+dp pec2_size_32  : pec_size_32
 
-//cacheBlock rsflipflops
-dp rsflipflop3_size_1 : rsflipflop_size_1
-dp rsflipflop3_size_32 : rsflipflop_size_32
+//cacheBlock pecs
+dp pec3_size_1   : pec_size_1
+dp pec3_size_32  : pec_size_32
 
-//mwiFilterBlock rsflipflops
-dp rsflipflop4_size_1 : rsflipflop_size_1
-dp rsflipflop4_size_32 : rsflipflop_size_32
+//mwiFilterBlock pecs
+dp pec4_size_1   : pec_size_1
+dp pec4_size_32  : pec_size_32
 
 
 dp busBlock(in reset : ns(1);
@@ -65,13 +65,13 @@ dp busBlock(in reset : ns(1);
 			out ocmd : ns(32))
 {
 	//output
-	use rsflipflop1_size_1( set, 1,       dataoutrdy, datainrdy);
-	use rsflipflop_size_32( set, idatain, dataoutrdy, odatain);
-	use rsflipflop1_size_32(set, icmd,    dataoutrdy, ocmd);
+	use pec_size_1( set, 1,       dataoutrdy, datainrdy);
+	use pec_size_32( set, idatain, dataoutrdy, odatain);
+	use pec1_size_32(set, icmd,    dataoutrdy, ocmd);
 
 	//input
-	use rsflipflop2_size_1(dataoutrdy, 1,       reset, valueArrived);
-	use rsflipflop2_size_32(dataoutrdy, dataout, reset, value);
+	use pec2_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use pec2_size_32(dataoutrdy, dataout, reset, value);
 
 	always
 	{
@@ -92,8 +92,8 @@ dp cacheBlock(in reset : ns(1);
 			out odatain : tc(32))
 {
 	//input
-	use rsflipflop3_size_1(dataoutrdy, 1,       reset, valueArrived);
-	use rsflipflop3_size_32(dataoutrdy, dataout, reset, value);
+	use pec3_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use pec3_size_32(dataoutrdy, dataout, reset, value);
 
 	always
 	{
@@ -114,8 +114,8 @@ dp mwiFilterBlock(in reset : ns(1);
 			out odatain : tc(32))
 {
 	//input
-	use rsflipflop4_size_1(dataoutrdy, 1,       reset, valueArrived);
-	use rsflipflop4_size_32(dataoutrdy, dataout, reset, value);
+	use pec4_size_1(dataoutrdy, 1,       reset, valueArrived);
+	use pec4_size_32(dataoutrdy, dataout, reset, value);
 
 	always
 	{
